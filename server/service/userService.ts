@@ -16,6 +16,7 @@ const getUserProfile = async (uid: string) => {
 };
 
 const updateUser = async (uid: string, userData: User) => {
+
   try {
     const user = await userDAL.updateUser(uid, userData);
     if (!user) {
