@@ -1,0 +1,27 @@
+{
+    
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "moduleResolution": "node",
+    // "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "typeRoots": [
+      "./node_modules/@types" // זהו המיקום המומלץ
+    ],
+    "outDir": "./dist",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "strict": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "server/**/*.ts", 
+    "server/routes/**/*.ts"
+, "index.ts"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
