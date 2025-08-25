@@ -1,0 +1,34 @@
+{
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/pg": "^8.15.5",
+    "typescript": "^5.9.2"
+  },
+  "name": "mindsyncserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayala82585/mindsyncServer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ayala82585/mindsyncServer/issues"
+  },
+  "homepage": "https://github.com/ayala82585/mindsyncServer#readme",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "firebase": "^12.1.0",
+    "firebase-admin": "^13.4.0",
+    "pg": "^8.16.3"
+  }
+}
