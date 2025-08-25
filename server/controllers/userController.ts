@@ -1,11 +1,9 @@
 import { Request, Response } from 'express';
 import { getUserProfile } from '../service/userService';
 import { updateUser } from '../service/userService';
-import UserDAL from '../dal/userDal';
 
-const getUserProfileController = async (req: Request, res: Response): Promise<void> => {
+export const getUserProfileController = async (req: Request, res: Response): Promise<void> => {
   const { uid } = req.params;
-
   try {
     const userProfile = await getUserProfile(uid);
     if (userProfile) {
@@ -19,7 +17,7 @@ const getUserProfileController = async (req: Request, res: Response): Promise<vo
   }
 };
 
-const updateUserController = async (req: Request, res: Response): Promise<void> => {
+export const updateUserController = async (req: Request, res: Response): Promise<void> => {
   const { uid } = req.params;
   const { user } = req.body;
   try {
@@ -35,4 +33,3 @@ const updateUserController = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export { getUserProfileController, updateUserController };

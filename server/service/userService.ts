@@ -1,7 +1,7 @@
-import UserDal, { User, UserDAL } from '../dal/userDal';
+import UserDal from '../dal/userDal';
+import { User } from '../models/User';
 
 const userDAL = new UserDal();
-
 
 const getUserProfile = async (uid: string) => {
   try {
@@ -16,7 +16,6 @@ const getUserProfile = async (uid: string) => {
 };
 
 const updateUser = async (uid: string, userData: User) => {
-
   try {
     const user = await userDAL.updateUser(uid, userData);
     if (!user) {

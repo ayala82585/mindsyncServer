@@ -1,6 +1,0 @@
-# Ignore node_modules
-/node_modules
-# Ignore package-lock.json
-package-lock.json
-
-mindsync-3fb4f-firebase-adminsdk-fbsvc-6a8eb9b421.json
