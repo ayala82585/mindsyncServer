@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import UserDal, { UserDAL } from '../dal/userDal';
 import { User } from '../models/User';
 //import { upsertUserFromFirebase } from '../dal/userDal';
@@ -30,6 +31,13 @@ async function createOrUpdateUser(uid: string, email: string, profile: { display
     
 
 
+=======
+import UserDal from '../dal/userDal';
+import { User } from '../models/User';
+
+const userDAL = new UserDal();
+
+>>>>>>> origin/develop
 const getUserProfile = async (uid: string) => {
   try {
     const user = await userDAL.getUserByUid(uid);
@@ -43,7 +51,6 @@ const getUserProfile = async (uid: string) => {
 };
 
 const updateUser = async (uid: string, userData: User) => {
-
   try {
     const user = await userDAL.updateUser(uid, userData);
     if (!user) {
