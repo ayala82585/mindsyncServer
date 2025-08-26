@@ -1,9 +1,4 @@
 import authRoutes from './routes/authRoutes';
-
-
-
-
-
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
 import { authenticate } from './middleware/auth';

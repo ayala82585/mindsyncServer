@@ -8,5 +8,3 @@ router.post('/verify-token', verifyTokenController);
 router.post('/admin/users/:uid/role', setRoleAndClaimsController); // ← חדש
 
 export default router;
-
-
