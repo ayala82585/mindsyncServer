@@ -3,6 +3,7 @@ import authRoutes from './routes/authRoutes';
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
 import { authenticate } from './middleware/auth';
+import './Firebase'; // מוודא אתחול פעם אחת
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -42,6 +43,7 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
     data_access: "You have successfully accessed protected data!"
   });
 });
+
 
 
 
