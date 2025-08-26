@@ -1,22 +1,8 @@
-<<<<<<< HEAD
-import express from 'express';
 import authRoutes from './routes/authRoutes';
-import userRoutes from './routes/userRoutes';
-
-
-const app = express();
-app.use(express.json());
-app.use('/users', userRoutes);
-app.use('/', authRoutes);
-
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
-
-=======
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
 import { authenticate } from './middleware/auth';
+import './Firebase'; // מוודא אתחול פעם אחת
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -24,14 +10,7 @@ interface AuthenticatedRequest extends Request {
     email: string | null;
   };
 }
-
-const admin = require('firebase-admin');
-const serviceAccount = require('./config/serviceAccountKey.json'); 
 const app = express();
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
 
 app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
@@ -48,9 +27,9 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
   });
 });
 
+app.use('/', authRoutes);
 app.use(express.json());
 app.use('/', userRoutes);
 app.listen(3000, () => {
   console.log('Server running on port 3000');
-});
->>>>>>> origin/develop
+})
