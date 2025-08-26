@@ -1,22 +1,30 @@
 
+// מחלקת UserDAL
 import { Pool } from 'pg'; 
 import { User } from '../models/User';
 import admin from 'firebase-admin'; 
+import database from '../database'; // ייבוא של מופע ה-Database
 
 export class UserDAL {
 
-  private pool: Pool;
+    private pool = database.getPool(); // חיבור למסד נתונים
 
-  constructor() {
-    this.pool = new Pool({
-      user: 'postgres',
-      host: 'localhost',
-      database: 'postgres',
-      password: '1111',
-      port: 5432,
-    });
+  public async upsertUserFromFirebase(uid: string, userData: User): Promise<User | null> {
+    try {
+        const existingUser = await this.getUserByUid(uid);
+        if (existingUser) {
+            // אם המשתמש קיים, עדכן את הפרטים
+            return await this.updateUser(uid, userData);
+        } else {
+            // אם המשתמש לא קיים, הוסף אותו
+            const result = await database.getPool().query('INSERT INTO users (uid, email, full_name, photo_url) VALUES (\$1, \$2, \$3, \$4) RETURNING *', [uid, userData.email, userData.full_name, userData.photo_url]);
+            if (!result.rows || result.rows.length === 0) {
+                return null;
+            }
+            return result.rows[0];
+        }} catch (error) {
+        throw error;}
   }
-
 public async verifyUid(uid: string): Promise<boolean> {
     try {
       const userRecord = await admin.auth().getUser(uid); 
@@ -39,7 +47,7 @@ public async verifyUid(uid: string): Promise<boolean> {
       }
       return result.rows[0];
     } catch (error) {
-      throw error;
+        throw error;
     }
   }
 
