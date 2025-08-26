@@ -1,19 +1,5 @@
-<<<<<<< HEAD
-import express from 'express';
+
 import authRoutes from './routes/authRoutes';
-import userRoutes from './routes/userRoutes';
-
-
-const app = express();
-app.use(express.json());
-app.use('/users', userRoutes);
-app.use('/', authRoutes);
-
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
-
-=======
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
 import { authenticate } from './middleware/auth';
@@ -27,10 +13,19 @@ interface AuthenticatedRequest extends Request {
 
 const admin = require('firebase-admin');
 const serviceAccount = require('./config/serviceAccountKey.json'); 
-const app = express();
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
+});
+
+const app = express();
+app.use(express.json());
+app.use(express.json());
+app.use('/', userRoutes);
+app.use('/', authRoutes);
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
 });
 
 app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Response) => {
@@ -48,9 +43,6 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
   });
 });
 
-app.use(express.json());
-app.use('/', userRoutes);
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
->>>>>>> origin/develop
+
+
+
