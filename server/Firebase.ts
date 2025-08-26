@@ -7,9 +7,10 @@ dotenv.config();
 
 const serviceAccount = require('./mindsync-b978b-firebase-adminsdk-fbsvc-f0703ab54f.json');
 
+if(admin.apps.length === 0 ){
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-});
+});}
 
 export async function verifyFirebaseToken(token: string): Promise<{ uid: string, email?: string, claims: any }> {
   try {
@@ -23,3 +24,4 @@ export async function verifyFirebaseToken(token: string): Promise<{ uid: string,
     throw new Error('Invalid Firebase token');
   }
 }
+export default admin;
