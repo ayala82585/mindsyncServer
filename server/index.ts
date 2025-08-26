@@ -2,6 +2,7 @@ import authRoutes from './routes/authRoutes';
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
 import { authenticate } from './middleware/auth';
+import './Firebase';  
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -10,23 +11,10 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-const admin = require('firebase-admin');
+// const admin = require('firebase-admin');
 const serviceAccount = require('./config/serviceAccountKey.json'); 
 const app = express();
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
-
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(
-      // projectId: process.env.FIREBASE_PROJECT_ID,
-      // clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      // privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-    serviceAccount),
-  });
-}
 
 app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
