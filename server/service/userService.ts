@@ -5,15 +5,16 @@ import admin from 'firebase-admin';
 
 const userDAL = new UserDal();
 
-async function createOrUpdateUser(uid: string, email: string, profile: { displayName?: string; photoURL?: string }): Promise<User | null> {
+async function createOrUpdateUser(uid: string, email: string, full_name: string): Promise<User | null> {
     const userDal = new UserDAL(); // יצירת מופע של UserDAL
      const userData: User = {
     uid, 
     email,
-    full_name: profile.displayName !== undefined ? profile.displayName : 'ברירת מחדל',
-    photo_url: profile.photoURL !== undefined ? profile.photoURL : 'ברירת מחדל',
-    created_at: new Date(), 
-    updated_at: new Date() 
+    full_name,
+    photo_url: 'ברירת מחדל',
+    role: 'user', // או כל תפקיד ברירת מחדל שתרצה
+    created_at: new Date(),
+    updated_at: new Date()
 };
         return await userDal.upsertUserFromFirebase(uid, userData);
 }
@@ -44,8 +45,15 @@ const updateUser = async (uid: string, userData: User) => {
 
 export async function setUserRole(uid: string, role: string): Promise<void> {
   // אפשר לשלב לוגיקה עסקית: בדיקות role חוקי וכו'
-  const claims = { role, admin: role === 'admin' };
-  await admin.auth().setCustomUserClaims(uid, claims);
+  // const claims = { role, admin: role === 'admin' };
+  // await admin.auth().setCustomUserClaims(uid, claims);
+    await admin.auth().setCustomUserClaims(uid, { role });
+    const user = await getUserProfile(uid);
+    const newUser = {
+      ...user,
+      role 
+    };
+    await updateUser(uid, newUser);
 }
 
 export async function setCustomClaims(uid: string, claims: Record<string, any>): Promise<void> {
