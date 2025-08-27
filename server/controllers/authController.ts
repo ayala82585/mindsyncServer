@@ -12,7 +12,9 @@ export async function setRoleAndClaimsController(req: Request, res: Response) {
   }
 
   try {
+
     if (role) {
+      
       await setUserRole(uid, role);
     }
     if (claims && typeof claims === 'object') {
