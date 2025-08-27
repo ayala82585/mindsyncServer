@@ -3,9 +3,11 @@ import admin from 'firebase-admin';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Firebase Admin SDK initializing...");
+const serviceAccount = require('./mindsync-b978b-c1d1826e0375.json'); 
+console.log("###################################Firebase Admin SDK initializing...",serviceAccount);
 
-
-const serviceAccount = require('./mindsync-b978b-firebase-adminsdk-fbsvc-f0703ab54f.json');
+// const serviceAccount = require('./mindsync-b978b-firebase-adminsdk-fbsvc-f0703ab54f.json');
 
 if(admin.apps.length === 0 ){
 admin.initializeApp({
