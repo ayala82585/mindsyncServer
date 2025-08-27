@@ -12,8 +12,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const USER_EMAIL = "sury108683@gmail.com"; 
-const USER_PASSWORD = "108683"; 
+const USER_EMAIL = "s8683@gmail.com"; 
+const USER_PASSWORD = "9998683"; 
 
 async function getFirebaseIdToken() {
   try {
