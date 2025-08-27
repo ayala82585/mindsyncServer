@@ -2,7 +2,7 @@ import authRoutes from './routes/authRoutes';
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
 import { authenticate } from './middleware/auth';
-import tokenRoute from './routes/tokenRoute';
+// import tokenRoute from './routes/tokenRoute';
 import './Firebase';  
 
 interface AuthenticatedRequest extends Request {
@@ -35,7 +35,7 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
 app.use(express.json());
 app.use('/', userRoutes);
 app.use('/', authRoutes);
-app.use('/', to);
+// app.use('/', to);
 
 console.log("!!!!!!!!!!!!!!!!!!!!!!!!!",new Date().toISOString());  
 app.listen(3000, () => {
