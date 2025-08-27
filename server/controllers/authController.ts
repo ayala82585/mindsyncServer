@@ -2,6 +2,8 @@
 import { Request, Response } from 'express';
 import { verifyFirebaseToken } from '../Firebase';
 import { setUserRole, setCustomClaims } from '../service/userService'; 
+import { sendVerificationEmail } from '../service/authService'; // ודא שהנתיב נכון
+
 
 export async function setRoleAndClaimsController(req: Request, res: Response) {
   const { uid } = req.params;
@@ -41,3 +43,24 @@ export async function verifyTokenController(req: Request, res: Response) {
   }
 }
 
+// הגדרת אינטרפייס עבור Request מאומת
+// בהנחה ש-middleware האימות שלך מוסיף את פרטי המשתמש ל-req.user
+interface AuthenticatedRequest extends Request {
+  user?: { uid: string; email?: string; /* ... נתונים נוספים של המשתמש מה-ID Token */ };
+}
+
+export async function sendVerificationEmailController(req: AuthenticatedRequest, res: Response) {
+  // ודא שהמשתמש מאומת וה-UID שלו זמין (זה צריך לקרות ב-middleware)
+  const uid = req.user?.uid;
+  if (!uid) {
+    return res.status(401).json({ message: 'Unauthorized: User UID not found in request.' });
+  }
+
+  try {
+    const result = await sendVerificationEmail(uid);
+    res.status(200).json(result); // שלח תגובת הצלחה ללקוח
+  } catch (error: any) {
+    console.error("Error in sendVerificationEmailController:", error);
+    res.status(500).json({ message: error.message || 'Internal server error during email verification request.' });
+  }
+}

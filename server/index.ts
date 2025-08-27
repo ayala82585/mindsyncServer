@@ -4,6 +4,8 @@ import userRoutes from './routes/userRoutes';
 import { authenticate } from './middleware/auth';
 // import tokenRoute from './routes/tokenRoute';
 import './Firebase';  
+import admin from './Firebase';
+import { Auth } from 'firebase-admin/lib/auth/auth';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -41,3 +43,5 @@ console.log("!!!!!!!!!!!!!!!!!!!!!!!!!",new Date().toISOString());
 app.listen(3000, () => {
   console.log('Server running on port 3000');
 });
+
+export const auth: Auth = admin.auth(); // <--- הוסף את ": Auth" כאן

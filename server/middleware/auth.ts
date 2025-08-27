@@ -61,3 +61,12 @@ export async function authenticate(
     return res.status(statusCode).json({ error: errorMessage });
   }
 }
+
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
+
+  // 1. ודא שכותרת Authorization קיימת ובפורמט Bearer Token
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Unauthorized: No token provided or invalid format.' });
+  }
+}
