@@ -1,6 +1,6 @@
+import express from 'express';
+import { getUserProfileController, updateUserController, handleUserUpsert } from '../controllers/userController';
  import { Router, Request, Response, NextFunction } from 'express';
- import  express from 'express';
-import { getUserProfileController ,handleUserUpsert,updateUserController} from '../controllers/userController';
 import { authenticate } from '../middleware/auth';
 
 const router = express.Router();
