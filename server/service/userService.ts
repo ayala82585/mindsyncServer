@@ -1,4 +1,4 @@
-import UserDal, { UserDAL } from '../dal/userDal';
+import UserDal from '../dal/userDal';
 import { User } from '../models/User';
 import upsertUserFromFirebase from '../dal/userDal';
 import admin from 'firebase-admin';
@@ -6,7 +6,7 @@ import admin from 'firebase-admin';
 const userDAL = new UserDal();
 
 async function createOrUpdateUser(uid: string, email: string, full_name: string): Promise<User | null> {
-    const userDal = new UserDAL(); // יצירת מופע של UserDAL
+    const userDal = new UserDal(); // יצירת מופע של UserDAL
      const userData: User = {
     uid, 
     email,
