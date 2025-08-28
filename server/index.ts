@@ -37,7 +37,7 @@ app.use('/', userRoutes);
 app.use('/', authRoutes);
 // app.use('/', to);
 
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!",new Date().toISOString());  
+
 app.listen(3000, () => {
   console.log('Server running on port 3000');
 });

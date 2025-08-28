@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getUserProfile } from '../service/userService';
 import { updateUser } from '../service/userService';
-// import UserDAL from '../dal/userDal';
+import UserDAL from '../dal/userDal';
 import { createOrUpdateUser } from '../service/userService';
 
 export async function handleUserUpsert(req: Request, res: Response) {

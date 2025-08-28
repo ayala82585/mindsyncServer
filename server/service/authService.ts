@@ -38,6 +38,7 @@ export async function checkAndSyncEmailVerified(uid: string): Promise<{
       await userDal.setVerified(uid);
       return { dbVerified: true, firebaseVerified: true, synced: true };
     }
+    console.log('User exists in DB but is not verified',dbFlag);
     // אם dbFlag === null ואין upsert אוטומטי כאן, רק נחזיר סטטוס:
     return { dbVerified: false, firebaseVerified: true, synced: false };
   }
