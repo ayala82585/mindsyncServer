@@ -14,13 +14,13 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
 });}
 
-export async function verifyFirebaseToken(token: string): Promise<{ uid: string, email?: string, claims: any }> {
+export async function verifyFirebaseToken(token: string): Promise<{ uid: string, email?: string, full_name?: string }> {
   try {
     const decoded = await admin.auth().verifyIdToken(token);
     return {
       uid: decoded.uid,
       email: decoded.email,
-      claims: decoded
+      full_name: decoded.full_name
     };
   } catch (error) {
     throw new Error('Invalid Firebase token');
