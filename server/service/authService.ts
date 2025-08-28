@@ -1,7 +1,5 @@
-import admin from '../Firebase';
 import UserDAL from '../dal/userDal';
 import admin from 'firebase-admin';
-
 export async function setUserRole(uid: string, role: string): Promise<void> {
   // אפשר לשלב לוגיקה עסקית: בדיקות role חוקי וכו'
   const claims = { role, admin: role === 'admin' };
@@ -46,7 +44,12 @@ export async function checkAndSyncEmailVerified(uid: string): Promise<{
   // 4) לא מאומת ב-Firebase
   return { dbVerified: !!dbFlag, firebaseVerified: false, synced: false };
 }
-
   // מיזוג: קיימים + חדשים (חדשים גוברים)
-  await admin.auth().setCustomUserClaims(uid, { ...existing, ...claims });
-}
+  // await admin.auth().setCustomUserClaims(uid, { ...existing, ...claims });
+
+
+
+
+
+
+

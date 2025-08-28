@@ -13,15 +13,9 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-// const admin = require('firebase-admin');
-// const serviceAccount = require('./config/serviceAccountKey.json'); 
 const app = express();
-const admin = require('firebase-admin');
-const serviceAccount = require('./config/serviceAccountKey.json'); 
-
-
-const app = express();
-app.use(express.json());
+//const admin = require('firebase-admin');
+//const serviceAccount = require('./mindsync-3fb4f-firebase-adminsdk-fbsvc-6a8eb9b421.json');
 app.use(express.json());
 app.use('/', userRoutes);
 app.use('/', authRoutes);
@@ -45,14 +39,7 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
   });
 });
 
-app.use(express.json());
-app.use('/', userRoutes);
-app.use('/', authRoutes);
-// app.use('/', to);
 
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
 
 

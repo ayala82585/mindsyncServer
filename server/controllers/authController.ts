@@ -51,12 +51,8 @@ export async function syncUserFromTokenController(req: Request, res: Response) {
     const decoded = await verifyFirebaseToken(token);
     const uid = decoded.uid;
     const email = decoded.email || '';
-    const profile = {
-      displayName: (decoded as any).name as string | undefined,
-      photoURL: (decoded as any).picture as string | undefined,
-    };
-
-    const user = await createOrUpdateUser(uid, email, profile);
+    const full_name = decoded.full_name || '';
+    const user = await createOrUpdateUser(uid, email, full_name);
     if (!user) return res.status(500).json({ error: 'Failed to upsert user' });
 
     return res.status(200).json(user);
