@@ -73,6 +73,15 @@ public async updateUser(uid: string, userData: User): Promise<User | null> {
     }
   }
 
+  public async getVerifyFlag(uid: string): Promise<boolean | null> {
+    const sql = 'SELECT isVerified FROM users WHERE uid = $1';
+    const { rows } = await this.pool.query(sql, [uid]);
+    if (!rows.length) return null;              // אין משתמש בטבלה
+    return !!rows[0].isVerified;
+  }
+  public async setVerified(uid: string): Promise<void> {
+    const sql = 'UPDATE users SET isVerified = TRUE, updated_at = NOW() WHERE uid = $1';
+    await this.pool.query(sql, [uid]);
+  }
 }
-
 export default UserDAL;
