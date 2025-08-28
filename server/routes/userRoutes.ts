@@ -16,4 +16,5 @@ router.get("/protected", verifyEmailMiddleware, (req: Request, res: Response) =>
   const user = (req as any).user;
   res.json({ message: `Hello ${user.email}, you are verified!` });
 });
+
 export default router;
