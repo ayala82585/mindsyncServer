@@ -1,3 +1,4 @@
+
 import authRoutes from './routes/authRoutes';
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
@@ -15,7 +16,17 @@ interface AuthenticatedRequest extends Request {
 // const admin = require('firebase-admin');
 // const serviceAccount = require('./config/serviceAccountKey.json'); 
 const app = express();
+const admin = require('firebase-admin');
+const serviceAccount = require('./config/serviceAccountKey.json'); 
 
+
+app.use(express.json());
+app.use('/', userRoutes);
+app.use('/', authRoutes);
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
 
 app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
@@ -32,12 +43,3 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
   });
 });
 
-app.use(express.json());
-app.use('/', userRoutes);
-app.use('/', authRoutes);
-// app.use('/', to);
-
-console.log("!!!!!!!!!!!!!!!!!!!!!!!!!",new Date().toISOString());  
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
