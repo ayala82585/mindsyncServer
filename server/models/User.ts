@@ -7,6 +7,7 @@ export interface User {
   role: string | null;
   created_at: Date;
   updated_at: Date;
+  is_verified?: boolean; // שדה אופציונלי לסימון אימות דוא"ל
 }
 
 
