@@ -6,7 +6,7 @@ import admin from 'firebase-admin';
 import database from '../database'; // ייבוא של מופע ה-Database
 import { Request, Response } from 'express';
 
-export class UserDAL {
+ class UserDAL {
 
     private pool = database.getPool(); // חיבור למסד נתונים
 
@@ -73,6 +73,15 @@ public async updateUser(uid: string, userData: User): Promise<User | null> {
     }
   }
 
+  public async getVerifyFlag(uid: string): Promise<boolean | null> {
+    const sql = 'SELECT is_verified FROM users WHERE uid = $1';
+    const { rows } = await this.pool.query(sql, [uid]);
+    if (!rows.length) return null;              // אין משתמש בטבלה
+    return !!rows[0].is_verified;
+  }
+  public async setVerified(uid: string): Promise<void> {
+    const sql = 'UPDATE users SET is_verified = TRUE, updated_at = NOW() WHERE uid = $1';
+    await this.pool.query(sql, [uid]);
+  }
 }
-
 export default UserDAL;
