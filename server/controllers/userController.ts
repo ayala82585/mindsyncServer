@@ -5,12 +5,13 @@ import UserDAL from '../dal/userDal';
 import { createOrUpdateUser } from '../service/userService';
 
 export async function handleUserUpsert(req: Request, res: Response) {
-    const { uid, email, profile } = req.body;
+    const { uid, email, full_name } = req.body;
     
     try {
-        const user = await createOrUpdateUser(uid, email, profile);
+        const user = await createOrUpdateUser(uid, email, full_name);
         res.status(200).json(user);
     } catch (error) {
+              console.error("Error in handleUserUpsert:", error); // הדפס את השגיאה
         res.status(500).json({ error: 'Something went wrong' });
     }
 }

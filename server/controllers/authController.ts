@@ -1,8 +1,10 @@
 
 import { Request, Response } from 'express';
 import { verifyFirebaseToken } from '../Firebase';
+import { checkAndSyncEmailVerified } from '../service/authService';
 import { createOrUpdateUser} from '../service/userService'; 
 import { setUserRole, setCustomClaims } from '../service/authService';
+ 
 
 export async function setRoleAndClaimsController(req: Request, res: Response) {
   const { uid } = req.params;
@@ -13,7 +15,9 @@ export async function setRoleAndClaimsController(req: Request, res: Response) {
   }
 
   try {
+
     if (role) {
+      
       await setUserRole(uid, role);
     }
     if (claims && typeof claims === 'object') {
@@ -58,6 +62,17 @@ export async function syncUserFromTokenController(req: Request, res: Response) {
     return res.status(200).json(user);
   } catch (err: any) {
     return res.status(401).json({ error: err?.message || 'Invalid token' });
+  }
+}
+
+export async function verifyEmailStatusController(req: Request, res: Response) {
+  const { uid } = req.params; // או מ-req.user.uid אם את מאמתת עם המידלוור
+  if (!uid) return res.status(400).json({ error: 'Missing uid' });
+  try {
+    const result = await checkAndSyncEmailVerified(uid);
+    return res.status(200).json(result);
+  } catch (err: any) {
+    return res.status(500).json({ error: err?.message || 'verify email failed' });
   }
 }
 
