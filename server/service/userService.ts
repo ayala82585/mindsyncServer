@@ -17,6 +17,7 @@ async function createOrUpdateUser(uid: string, email: string, full_name: string)
     updated_at: new Date()
 };
         return await userDal.upsertUserFromFirebase(uid, userData);
+
 }
 
 const getUserProfile = async (uid: string) => {
@@ -32,6 +33,7 @@ const getUserProfile = async (uid: string) => {
 };
 
 const updateUser = async (uid: string, userData: User) => {
+
   try {
     const user = await userDAL.updateUser(uid, userData);
     if (!user) {
@@ -56,12 +58,6 @@ export async function setUserRole(uid: string, role: string): Promise<void> {
     await updateUser(uid, newUser);
 }
 
-export async function setCustomClaims(uid: string, claims: Record<string, any>): Promise<void> {
-  // הבאת claims קיימים (לא חובה, אבל שימושי למיזוג)
-  const user = await admin.auth().getUser(uid);
-  const existing = (user.customClaims || {}) as Record<string, any>;
 
-  // מיזוג: קיימים + חדשים (חדשים גוברים)
-  await admin.auth().setCustomUserClaims(uid, { ...existing, ...claims });
-}
+
 export { getUserProfile, updateUser , createOrUpdateUser };
