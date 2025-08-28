@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { verifyFirebaseToken } from '../Firebase';
 import { setUserRole, setCustomClaims } from '../service/userService'; 
+import { checkAndSyncEmailVerified } from '../service/authService';
 
 export async function setRoleAndClaimsController(req: Request, res: Response) {
   const { uid } = req.params;
@@ -38,6 +39,17 @@ export async function verifyTokenController(req: Request, res: Response) {
     res.json(userData);
   } catch (error) {
     res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
+export async function verifyEmailStatusController(req: Request, res: Response) {
+  const { uid } = req.params; // או מ-req.user.uid אם את מאמתת עם המידלוור
+  if (!uid) return res.status(400).json({ error: 'Missing uid' });
+  try {
+    const result = await checkAndSyncEmailVerified(uid);
+    return res.status(200).json(result);
+  } catch (err: any) {
+    return res.status(500).json({ error: err?.message || 'verify email failed' });
   }
 }
 
