@@ -1,4 +1,4 @@
-import UserDal, { UserDAL } from '../dal/userDal';
+import UserDal from '../dal/userDal';
 import { User } from '../models/User';
 import upsertUserFromFirebase from '../dal/userDal';
 import admin from 'firebase-admin';

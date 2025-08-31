@@ -8,6 +8,14 @@ import { Request, Response } from 'express';
 
  class UserDAL {
 
+  
+     static updateUser(uid: any, arg1: { preferences: { twofa_secret: string; twofa_enabled: boolean; }; }) {
+         throw new Error("Method not implemented.");
+     }
+     static getByUid(uid: String) {
+         throw new Error("Method not implemented.");
+     }
+
     private pool = database.getPool(); // חיבור למסד נתונים
 
   public async upsertUserFromFirebase(uid: string, userData: User): Promise<User | null> {

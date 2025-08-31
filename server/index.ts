@@ -4,11 +4,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
 import { authenticate } from './middleware/auth';
 // import tokenRoute from './routes/tokenRoute';
-<<<<<<< HEAD
-import './Firebase';  
-=======
 import './Firebase'; // מוודא אתחול פעם אחת
->>>>>>> d4ec7dcc27a61a8cdc0056d334c3f86abbdf6254
+import twofaRoutes from "./routes/twofaRoutes";
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -20,8 +17,8 @@ interface AuthenticatedRequest extends Request {
 // const admin = require('firebase-admin');
 // const serviceAccount = require('./config/serviceAccountKey.json'); 
 const app = express();
-const admin = require('firebase-admin');
-const serviceAccount = require('./config/serviceAccountKey.json'); 
+// const admin = require('firebase-admin');
+// const serviceAccount = require('./mindsync-b978b-c1d1826e0375.json'); 
 
 
 app.use(express.json());
@@ -32,6 +29,8 @@ app.listen(3000, () => {
   console.log('Server running on port 3000');
 });
 
+
+app.use("/2fa", twofaRoutes);
 app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
     return res.status(500).json({ error: "Authenticated user information not found." });
@@ -47,17 +46,5 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
   });
 });
 
-<<<<<<< HEAD
-=======
-app.use(express.json());
-app.use('/', userRoutes);
-app.use('/', authRoutes);
-// app.use('/', to);
 
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
-
-
->>>>>>> d4ec7dcc27a61a8cdc0056d334c3f86abbdf6254
