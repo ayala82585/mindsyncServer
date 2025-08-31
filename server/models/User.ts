@@ -8,6 +8,8 @@ export interface User {
   created_at: Date;
   updated_at: Date;
   is_verified?: boolean; // שדה אופציונלי לסימון אימות דוא"ל
+  twofa_secret?: string | null; // סוד 2FAtotp_secret
+  twofa_enabled?: boolean | null; // סוד 2FAtotp_secret
 }
 
 

@@ -1,13 +1,15 @@
 
 import { Router } from 'express';
-import { verifyEmailStatusController, verifyTokenController } from '../controllers/authController';
-import { setRoleAndClaimsController } from '../controllers/authController';
-import { authenticate } from '../middleware/auth';
+import { verifyTokenController,setRoleAndClaimsController} from '../controllers/authController';
+import { requireFirebaseAuthWithMfa, requireFirebaseAuth } from '../middleware/auth';
+
 const router = Router();
 
 router.post('/verify-token', verifyTokenController);
-router.post('/admin/users/:uid/role', setRoleAndClaimsController); // ← חדש
-router.get('/auth/verify-email-status/:uid', authenticate, verifyEmailStatusController);
+router.post('/admin/users/:uid/role', requireFirebaseAuth, requireFirebaseAuthWithMfa, setRoleAndClaimsController);
+
 
 
 export default router;
+
+

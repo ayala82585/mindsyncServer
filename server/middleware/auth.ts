@@ -1,67 +1,22 @@
 import { Request, Response, NextFunction } from "express";
 import * as admin from "firebase-admin"; // Import firebase-admin
-
-export async function requireAuth(req: Request, res: Response, next: NextFunction) {
-  const header = req.headers.authorization;
-  if (!header || !header.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Missing Authorization Bearer token' });
-  }
-
-  const token = header.slice('Bearer '.length);
+import { verifyFirebaseToken } from "../Firebase";
+// ----------------------
+// אימות Firebase רגיל
+// ----------------------
+export async function requireFirebaseAuth(req: Request, res: Response, next: NextFunction) {
   try {
-    const decoded = await admin.auth().verifyIdToken(token);
-    (req as any).user = decoded; // הצמדה לבקשה
-    next();
-  } catch {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-}
-
-export function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const user = (req as any).user as admin.auth.DecodedIdToken | undefined;
-  if (!user || (!user.admin && user.role !== 'admin')) {
-    return res.status(403).json({ error: 'Admin only' });
-  }
-  next();
-}
-
-interface AuthenticatedRequest extends Request {
-  user?: { 
-    uid: string;
-    email: string | null;
-    
-  };
-}
-
-export async function authenticate(
-  req: AuthenticatedRequest, 
-  res: Response,
-  next: NextFunction
-) {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    console.warn("Authentication: No Bearer token or malformed header.");
-    return res.status(401).json({ error: "Authorization header missing or malformed (expected 'Bearer <token>')." });
-  }
-
-  const idToken = authHeader.split(" ")[1];
-
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
-
-    req.user = {
-      uid: decodedToken.uid,
-      email: decodedToken.email || null,
-    };
-    console.log(`Authentication: Token verified for UID: ${decodedToken.uid}`);
+    const header = req.headers.authorization || "";                         // קבלת כותרת Authorization
+    const idToken = header.startsWith("Bearer ") ? header.slice(7) : "";    // חילוץ הטוקן
+    if (!idToken) return res.status(401).json({ error: "missing id token" }); // אין טוקן -> 401
+    const decoded = await verifyFirebaseToken(idToken);                            // אימות מול Firebase
+    (req as any).uid = decoded.uid;                                          // שמירת UID ל־request
+    (req as any).firebaseDecoded = decoded;                                  // אפשר לשמור את ה-decoded לשימוש נוסף
     next();
   } catch (error: any) {
     console.error("Authentication Error:", error.code, error.message);
-
     let errorMessage = "Authentication failed.";
     let statusCode = 401; // Unauthorized
-
     switch (error.code) {
       case "auth/argument-error":
         errorMessage = "Invalid ID token provided.";
@@ -80,7 +35,27 @@ export async function authenticate(
         errorMessage = "Failed to authenticate token.";
         break;
     }
-
     return res.status(statusCode).json({ error: errorMessage });
+  }
+}
+// ----------------------
+// אימות Firebase + דרישת MFA
+// ----------------------
+export async function requireFirebaseAuthWithMfa(req: Request, res: Response, next: NextFunction) {
+  try {
+    const header = req.headers.authorization || "";
+    const idToken = header.startsWith("Bearer ") ? header.slice(7) : "";
+    if (!idToken) return res.status(401).json({ error: "missing id token" });
+    const decoded = await verifyFirebaseToken(idToken);
+    // בדיקה האם ה־decoded מכיל אינדיקציה שהשיחה כללה second factor
+    const mfaInfo = (decoded as any).firebase?.sign_in_second_factor;
+    if (!mfaInfo) {
+      return res.status(403).json({ error: "mfa required" });
+    }
+    (req as any).uid = decoded.uid;
+    (req as any).firebaseDecoded = decoded;
+    next();
+  } catch (e) {
+    return res.status(401).json({ error: "invalid id token" });
   }
 }
