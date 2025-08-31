@@ -2,13 +2,11 @@
 import authRoutes from './routes/authRoutes';
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
-import { authenticate } from './middleware/auth';
+import { requireFirebaseAuth } from './middleware/auth';
+import 'dotenv/config';
+
 // import tokenRoute from './routes/tokenRoute';
-<<<<<<< HEAD
-import './Firebase';  
-=======
 import './Firebase'; // מוודא אתחול פעם אחת
->>>>>>> d4ec7dcc27a61a8cdc0056d334c3f86abbdf6254
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -17,22 +15,24 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-// const admin = require('firebase-admin');
-// const serviceAccount = require('./config/serviceAccountKey.json'); 
 const app = express();
 const admin = require('firebase-admin');
-const serviceAccount = require('./config/serviceAccountKey.json'); 
+// const serviceAccount = require('./config/serviceAccountKey.json'); 
 
 
 app.use(express.json());
 app.use('/', userRoutes);
 app.use('/', authRoutes);
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
+const port = process.env.PORT;
 
-app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Response) => {
+// app.listen(3000, () => {
+//   console.log('Server running on port 3000');
+// });
+app.listen(port, () => console.log(`listening on ${port}`));
+
+
+app.get('/protected-data', requireFirebaseAuth, (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
     return res.status(500).json({ error: "Authenticated user information not found." });
   }
@@ -47,17 +47,4 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
   });
 });
 
-<<<<<<< HEAD
-=======
-app.use(express.json());
-app.use('/', userRoutes);
-app.use('/', authRoutes);
-// app.use('/', to);
 
-
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
-
-
->>>>>>> d4ec7dcc27a61a8cdc0056d334c3f86abbdf6254
