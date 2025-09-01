@@ -7,6 +7,8 @@ import 'dotenv/config';
 
 // import tokenRoute from './routes/tokenRoute';
 import './Firebase'; // מוודא אתחול פעם אחת
+import { ideasRouter } from './routes/ideaRoutes';
+import { sessionsRouter } from './routes/sessionRoutes';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -19,10 +21,12 @@ const app = express();
 const admin = require('firebase-admin');
 // const serviceAccount = require('./config/serviceAccountKey.json'); 
 
-
+app.use(requireFirebaseAuth);
 app.use(express.json());
 app.use('/', userRoutes);
 app.use('/', authRoutes);
+app.use('/ideas', ideasRouter);
+app.use('/sessions', sessionsRouter);
 
 const port = process.env.PORT;
 

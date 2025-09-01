@@ -3,7 +3,7 @@ import admin from 'firebase-admin';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
-const serviceAccount = require('./mindsync-b978b-c1d1826e0375.json'); 
+// const serviceAccount = require('./mindsync-b978b-c1d1826e0375.json'); 
 // const svc = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS!);
 
 // const serviceAccount = require('./mindsync-b978b-firebase-adminsdk-fbsvc-f0703ab54f.json');
