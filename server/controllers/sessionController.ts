@@ -4,7 +4,7 @@ import { createSessionService, joinSessionService } from '../service/sessionServ
 export async function createSessionCtrl(req: Request, res: Response, next: NextFunction) {
   try {
     ////////////////////////////////////////////////////////////////////////////
-    const ownerUid = req.params.uid;
+    const ownerUid = (req as any).uid;
     const { title, description } = req.body || {};
     if (!ownerUid) return res.status(401).json({ error: 'unauthorized' });
     if (!title || typeof title !== 'string' || title.trim().length === 0)
@@ -18,7 +18,7 @@ export async function createSessionCtrl(req: Request, res: Response, next: NextF
 
 export async function joinSessionCtrl(req: Request, res: Response, next: NextFunction) {
   try {
-    const uid = req.params.uid;
+    const uid = (req as any).uid;
     const sid = Number(req.params.id);
     if (!uid) return res.status(401).json({ error: 'unauthorized' });
     if (!Number.isInteger(sid)) return res.status(400).json({ error: 'invalid session id' });

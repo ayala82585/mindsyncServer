@@ -19,7 +19,7 @@ import { Request, Response } from 'express';
             return await this.updateUser(uid, userData);
         } else {
             // אם המשתמש לא קיים, הוסף אותו
-            const result = await database.getPool().query('INSERT INTO users (uid, email, full_name, photo_url) VALUES (\$1, \$2, \$3, \$4) RETURNING *', [uid, userData.email, userData.full_name, userData.photo_url]);
+            const result = await database.getPool().query('INSERT INTO users (uid, email, full_name, photo_url, role) VALUES (\$1, \$2, \$3, \$4, \$5) RETURNING *', [uid, userData.email, userData.full_name, userData.photo_url]);
             if (!result.rows || result.rows.length === 0) {
                 return null;
             }
@@ -62,7 +62,7 @@ public async updateUser(uid: string, userData: User): Promise<User | null> {
       return null; 
     }
   try {
-    const result = await this.pool.query('UPDATE users SET email = $1, full_name = $2, photo_url = $3, role = $4 WHERE uid = $5 RETURNING *', [userData.email, userData.full_name, userData.photo_url, userData.role, uid]);
+    const result = await this.pool.query('UPDATE users SET email = $1, full_name = $2, photo_url = $3, role = $4 WHERE uid = $5 RETURNING *', [userData.email, userData.full_name, userData.photo_url, uid]);
     console.log('Update');
       if (!result.rows || result.rows.length === 0) {
         return null;
