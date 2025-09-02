@@ -12,7 +12,6 @@ async function createOrUpdateUser(uid: string, email: string, full_name: string)
     email,
     full_name,
     photo_url: 'ברירת מחדל',
-    role: 'user', // או כל תפקיד ברירת מחדל שתרצה
     created_at: new Date(),
     updated_at: new Date()
 };
