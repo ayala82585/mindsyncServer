@@ -47,17 +47,6 @@ app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Respon
   });
 });
 
-<<<<<<< HEAD
-=======
-app.use(express.json());
-app.use('/', userRoutes);
-app.use('/', authRoutes);
-// app.use('/', to);
 
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
 
-
->>>>>>> d4ec7dcc27a61a8cdc0056d334c3f86abbdf6254
