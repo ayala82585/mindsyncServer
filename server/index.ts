@@ -2,6 +2,7 @@
 import authRoutes from './routes/authRoutes';
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
+
 import { requireFirebaseAuth } from './middleware/auth';
 import 'dotenv/config';
 
@@ -22,10 +23,13 @@ interface AuthenticatedRequest extends Request {
 const app = express();
 
 
-  
+  const cors = require('cors');
+
 const admin = require('firebase-admin');
 // const serviceAccount = require('./config/serviceAccountKey.json'); 
-
+app.use(cors({
+    origin: '*' // מאפשר לכל הדומיינים
+}));
 app.use(requireFirebaseAuth);
 app.use(express.json());
 app.use('/', userRoutes);
