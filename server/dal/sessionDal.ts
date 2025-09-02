@@ -13,12 +13,15 @@ export async function insertSession(title: string, description: string, ownerUid
   return r.rows[0];
 }
 export async function addParticipant(sessionId: number, userId: string): Promise<number | null> {
+
   const sql = `
     INSERT INTO session_participants (session_id, user_id)
     VALUES ($1, $2)
     ON CONFLICT (session_id, user_id) DO NOTHING
   `;
+
   const r = await pool.query(sql, [sessionId, userId]);
+
   return r.rowCount; // 1 אם נוסף, 0 אם כבר קיים
 }
 export async function sessionExists(sessionId: number): Promise<boolean | null> {
