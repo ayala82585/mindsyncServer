@@ -3,25 +3,37 @@ import admin from 'firebase-admin';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
-const serviceAccount = require('./mindsync-b978b-c1d1826e0375.json'); 
 
-// const serviceAccount = require('./mindsync-b978b-firebase-adminsdk-fbsvc-f0703ab54f.json');
-
-if(admin.apps.length === 0 ){
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-});}
+// if(admin.apps.length === 0 ){
+//     const path = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+//   if (!path) throw new Error('Missing GOOGLE_APPLICATION_CREDENTIALS path');
+//   const svc = require(path);
+// admin.initializeApp({
+//   credential: admin.credential.cert(svc as admin.ServiceAccount),
+// });}
+if (!admin.apps.length) {
+  // עדיפות: GOOGLE_APPLICATION_CREDENTIALS מצביע לקובץ JSON מחוץ לריפו
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    admin.initializeApp(); // ייקרא ע"י Application Default Credentials
+  }
+  // אופציה חלופית: JSON מלא במשתנה סביבה FIREBASE_SA_JSON
+  else if (process.env.FIREBASE_SA_JSON) {
+    const sa = JSON.parse(process.env.FIREBASE_SA_JSON);
+    admin.initializeApp({ credential: admin.credential.cert(sa) });
+  }
+  else {
+    throw new Error('Missing Firebase credentials: set GOOGLE_APPLICATION_CREDENTIALS or FIREBASE_SA_JSON');
+  }
+}
 
 export async function verifyFirebaseToken(token: string): Promise<{ uid: string, email?: string, full_name?: string }> {
   try {
     const decoded = await admin.auth().verifyIdToken(token);
-    return {
-      uid: decoded.uid,
-      email: decoded.email,
-      full_name: decoded.full_name
-    };
+    return decoded;
   } catch (error) {
     throw new Error('Invalid Firebase token');
   }
 }
+export const verifyIdToken = (idToken: string) => admin.auth().verifyIdToken(idToken);
+
 export default admin;
