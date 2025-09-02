@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express';
 import { verifyFirebaseToken } from '../Firebase';
-import { checkAndSyncEmailVerified } from '../service/authService';
+// import { checkAndSyncEmailVerified } from '../service/authService';
 import { createOrUpdateUser} from '../service/userService'; 
 import { setUserRole, setCustomClaims } from '../service/authService';
  
@@ -52,6 +52,9 @@ export async function syncUserFromTokenController(req: Request, res: Response) {
     const uid = decoded.uid;
     const email = decoded.email || '';
     const full_name = decoded.full_name || '';
+
+    // const full_name = decoded.full_name || '';
+
     const user = await createOrUpdateUser(uid, email, full_name);
     if (!user) return res.status(500).json({ error: 'Failed to upsert user' });
 
@@ -65,8 +68,8 @@ export async function verifyEmailStatusController(req: Request, res: Response) {
   const { uid } = req.params; // או מ-req.user.uid אם את מאמתת עם המידלוור
   if (!uid) return res.status(400).json({ error: 'Missing uid' });
   try {
-    const result = await checkAndSyncEmailVerified(uid);
-    return res.status(200).json(result);
+    // const result = await checkAndSyncEmailVerified(uid);
+    // return res.status(200).json(result);
   } catch (err: any) {
     return res.status(500).json({ error: err?.message || 'verify email failed' });
   }

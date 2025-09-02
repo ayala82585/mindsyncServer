@@ -2,9 +2,13 @@
 import authRoutes from './routes/authRoutes';
 import express, { Request, Response, NextFunction } from 'express';
 import userRoutes from './routes/userRoutes';
-import { authenticate } from './middleware/auth';
+import { requireFirebaseAuth } from './middleware/auth';
+import 'dotenv/config';
+
 // import tokenRoute from './routes/tokenRoute';
 import './Firebase'; // מוודא אתחול פעם אחת
+import { ideasRouter } from './routes/ideaRoutes';
+import { sessionsRouter } from './routes/sessionRoutes';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -14,17 +18,23 @@ interface AuthenticatedRequest extends Request {
 }
 
 const app = express();
-//const admin = require('firebase-admin');
-//const serviceAccount = require('./mindsync-3fb4f-firebase-adminsdk-fbsvc-6a8eb9b421.json');
+
+const admin = require('firebase-admin');
+
+app.use(requireFirebaseAuth);
 app.use(express.json());
 app.use('/', userRoutes);
 app.use('/', authRoutes);
+app.use('/ideas', ideasRouter);
+app.use('/sessions', sessionsRouter);
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
+const port = process.env.PORT;
 
-app.get('/protected-data', authenticate, (req: AuthenticatedRequest, res: Response) => {
+app.listen(port, () => console.log(`listening on ${port}`));
+
+
+
+app.get('/protected-data', requireFirebaseAuth, (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
     return res.status(500).json({ error: "Authenticated user information not found." });
   }
