@@ -5,7 +5,7 @@ class Database {
 
     constructor() {
         this.pool = new Pool({
-           user: 'postgres',
+      user: 'postgres',
       host: 'localhost',
       database: 'postgres',
       password: '1111',
@@ -14,6 +14,7 @@ class Database {
     }
 
     public getPool(): Pool {
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111Database pool accessed");
         return this.pool;
     }
 }
@@ -21,19 +22,6 @@ class Database {
 
 
 export default new Database();
-// מחלקת UserDAL
-// export class UserDAL {
-//   private pool: Pool;
 
-//   constructor() {
-//     this.pool = new Pool({
-//       user: 'postgres',
-//       host: 'localhost',
-//       database: 'postgres',
-//       password: '1111',
-//       port: 5432,
-//     });
-//   }
-// export default new Database();
 
 
