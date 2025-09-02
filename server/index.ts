@@ -17,7 +17,12 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
+
+
 const app = express();
+
+
+  
 const admin = require('firebase-admin');
 // const serviceAccount = require('./config/serviceAccountKey.json'); 
 
@@ -34,6 +39,7 @@ const port = process.env.PORT;
 //   console.log('Server running on port 3000');
 // });
 app.listen(port, () => console.log(`listening on ${port}`));
+
 
 
 app.get('/protected-data', requireFirebaseAuth, (req: AuthenticatedRequest, res: Response) => {
