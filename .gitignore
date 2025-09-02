@@ -1,0 +1,5 @@
+
+# ignore secrets & build artifacts
+server/*firebase-adminsdk*.json
+node_modules/
+server/firebaseToken/node_modules/
