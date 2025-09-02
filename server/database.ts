@@ -7,6 +7,7 @@ class Database {
     private pool: Pool;
 
     constructor() {
+
         // שימוש במשתנים סביבתיים כדי להחביא סיסמאות ונתונים רגישים
         this.pool = new Pool({
             user: process.env.DB_USER,       // שם המשתמש
@@ -19,6 +20,7 @@ class Database {
 
     // פונקציה שמחזירה את ה-pool
     public getPool(): Pool {
+
         return this.pool;
     }
 }

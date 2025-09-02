@@ -4,6 +4,8 @@ import userRoutes from './routes/userRoutes';
 import { requireFirebaseAuth } from './middleware/auth';
 // import tokenRoute from './routes/tokenRoute';
 import './Firebase'; // מוודא אתחול פעם אחת
+import { sessionsRouter } from './routes/sessionRoutes';
+import { ideasRouter } from './routes/ideaRoutes';
 interface AuthenticatedRequest extends Request {
   user?: {
     uid: string;
@@ -16,10 +18,14 @@ const admin = require('firebase-admin');
 app.use(express.json());
 app.use('/', userRoutes);
 app.use('/', authRoutes);
+
+app.use(requireFirebaseAuth);
+app.use('/sessions', sessionsRouter);
+app.use('/ideas', ideasRouter);
+
+
 const port = process.env.PORT;
-// app.listen(3000, () => {
-//   console.log('Server running on port 3000');
-// });
+
 app.listen(port, () => console.log(`listening on ${port}`));
 app.get('/protected-data', requireFirebaseAuth, (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {

@@ -4,6 +4,8 @@ import { verifyFirebaseToken } from "../Firebase";
 // ----------------------
 // אימות Firebase רגיל
 // ----------------------
+
+
 export async function requireFirebaseAuth(req: Request, res: Response, next: NextFunction) {
   try {
     const header = req.headers.authorization || "";                         // קבלת כותרת Authorization
@@ -58,4 +60,18 @@ export async function requireFirebaseAuthWithMfa(req: Request, res: Response, ne
   } catch (e) {
     return res.status(401).json({ error: "invalid id token" });
   }
+}
+
+export function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  // decoded מגיע מה- requireFirebaseAuth ששומר אותו על הבקשה
+  const decoded = (req as any).firebaseDecoded as any | undefined;
+
+  // התפקיד מגיע מ-Custom Claims בפיירבייס (למשל: { role: 'admin', admin: true })
+  const role = decoded?.role ?? decoded?.claims?.role;
+  const isAdmin = role === 'admin' || decoded?.admin === true;
+
+  if (!isAdmin) {
+    return res.status(403).json({ error: 'Admin only' });
+  }
+  next();
 }

@@ -6,9 +6,10 @@ import { createOrUpdateUser } from '../service/userService';
 
 export async function handleUserUpsert(req: Request, res: Response) {
     const { uid, email, full_name } = req.body;
-    
+    debugger
     try {
         const user = await createOrUpdateUser(uid, email, full_name);
+
         res.status(200).json(user);
     } catch (error) {
               console.error("Error in handleUserUpsert:", error); // הדפס את השגיאה

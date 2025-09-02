@@ -6,6 +6,8 @@ import { createOrUpdateUser} from '../service/userService';
 import { setUserRole, setCustomClaims } from '../service/authService';
  
 
+
+
 export async function setRoleAndClaimsController(req: Request, res: Response) {
   const { uid } = req.params;
   const { role, claims } = req.body as { role?: string; claims?: Record<string, any> };
@@ -14,16 +16,18 @@ export async function setRoleAndClaimsController(req: Request, res: Response) {
     return res.status(400).json({ error: 'Missing role and/or claims in body' });
   }
 
-  try {
+  // ולידציה לתפקידים מותרים בלבד:
+  if (role && !['admin', 'user'].includes(role)) {
+    return res.status(400).json({ error: 'Invalid role value' });
+  }
 
+  try {
     if (role) {
-      
-      await setUserRole(uid, role);
+      await setUserRole(uid, role as 'admin' | 'user'); // מעדכן בפיירבייס + DB
     }
     if (claims && typeof claims === 'object') {
-      await setCustomClaims(uid, claims);
+      await setCustomClaims(uid, claims); // אם יש, למזג עם claims קיימים
     }
-
     return res.status(200).json({ message: 'User role/claims updated' });
   } catch (err: any) {
     return res.status(500).json({ error: err?.message || 'Failed to update role/claims' });
