@@ -1,5 +1,20 @@
-import { insertIdea, isParticipant } from '../dal/ideaDal';
+import { insertIdea, isParticipant ,getIdeasFromSession, updateIdeaReaction} from '../dal/ideaDal';
 import {ideas} from '../models/Idea';
+
+
+export async function fetchSessionIdeas(sessionId: number, since?: string) {
+  return await getIdeasFromSession(sessionId, since);
+}
+
+export async function incrementReaction(ideaId: number, reaction: string) {
+  // ודא שהתגובה חוקית
+  const allowed = ["likes", "dislikes", "laughs", "sad", "angry"];
+  if (!allowed.includes(reaction)) {
+    throw new Error("Invalid reaction type");
+  }
+
+  return await updateIdeaReaction(ideaId, reaction);
+}
 
 export async function createIdeaService(params: {
   sessionId: number; authorId: string; text: string;
