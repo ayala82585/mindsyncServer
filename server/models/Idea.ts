@@ -1,7 +1,7 @@
 export interface ideas {
-    id: Number,
-    session_id: Number,
+    id: number,
+    session_id: number,
     text: Text,
-    author_id: String,
+    author_id: string,
     created_at: Date,
 }
