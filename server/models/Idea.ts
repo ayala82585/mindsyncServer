@@ -1,5 +1,5 @@
 export interface ideas {
-    id: Number,
+    id:number,
     session_id: number,
     text: Text,
     author_id: String,

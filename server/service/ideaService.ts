@@ -1,3 +1,4 @@
+
 import { insertIdea, isParticipant ,getIdeasFromSession, updateIdeaReaction} from '../dal/ideaDal';
 import {ideas} from '../models/Idea';
 

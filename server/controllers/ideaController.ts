@@ -32,8 +32,6 @@ export const reactToIdea = async (req: Request, res: Response) => {
 };
 
 
-
-
 export async function createIdeaCtrl(req: Request, res: Response, next: NextFunction) {
   try {
     const uid = (req as any).uid;

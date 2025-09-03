@@ -9,14 +9,12 @@ import { ideasRouter } from './routes/ideaRoutes';
 import { sessionsRouter } from './routes/sessionRoutes';
 import { json } from "body-parser";
 
-
 interface AuthenticatedRequest extends Request {
   user?: {
     uid: string;
     email: string | null;
   };
 }
-
 const app = express();
 
 const admin = require('firebase-admin');
