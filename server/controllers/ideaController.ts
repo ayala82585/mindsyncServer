@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createIdeaService } from '../service/ideaService';
+import { createIdeaService, fetchSessionIdeas, incrementReaction  } from '../service/ideaService';
 
 export async function createIdeaCtrl(req: Request, res: Response, next: NextFunction) {
   try {
@@ -15,3 +15,30 @@ export async function createIdeaCtrl(req: Request, res: Response, next: NextFunc
     return res.status(201).json(idea);
   } catch (e) { next(e); }
 }
+
+export const getIdeasBySession = async (req: Request, res: Response) => {
+  try {
+    const sessionId = req.params.sessionId;
+    const since = req.query.since as string | undefined;
+    if (!sessionId) return res.status(400).json({ error: "Missing sessionId" });
+    const ideas = await fetchSessionIdeas(Number(sessionId), since);
+    res.json(ideas);
+  } catch (err) {
+    console.error("Error fetching ideas:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const reactToIdea = async (req: Request, res: Response) => {
+  try {
+    const { ideaId } = req.params;
+    const { reaction } = req.body;
+    if (!reaction) return res.status(400).json({ error: "Missing reaction" });
+    const updated = await incrementReaction(Number(ideaId), reaction);
+    res.json(updated);
+  } catch (err) {
+    console.error("Error reacting to idea:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
