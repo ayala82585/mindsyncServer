@@ -26,6 +26,7 @@ if (!admin.apps.length) {
   }
 }
 
+
 export async function verifyFirebaseToken(token: string): Promise<{ uid: string, email?: string, full_name?: string }> {
   try {
     const decoded = await admin.auth().verifyIdToken(token);
