@@ -1,0 +1,3 @@
+
+# do not commit SA keys
+server/*firebase-adminsdk*.json
