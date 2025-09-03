@@ -7,7 +7,7 @@ const router = Router();
 
 router.post('/verify-token', verifyTokenController);
 router.post('/admin/users/:uid/role', setRoleAndClaimsController); // ← חדש
-router.get('/auth/verify-email-status/:uid', requireFirebaseAuth, verifyEmailStatusController);
+router.get('/verify-email-status/:uid', requireFirebaseAuth, verifyEmailStatusController);
 
 
 export default router;

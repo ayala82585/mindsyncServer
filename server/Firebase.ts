@@ -4,11 +4,16 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-
+// if(admin.apps.length === 0 ){
+//     const path = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+//   if (!path) throw new Error('Missing GOOGLE_APPLICATION_CREDENTIALS path');
+//   const svc = require(path);
+// admin.initializeApp({
+//   credential: admin.credential.cert(svc as admin.ServiceAccount),
+// });}
 if (!admin.apps.length) {
   // עדיפות: GOOGLE_APPLICATION_CREDENTIALS מצביע לקובץ JSON מחוץ לריפו
   if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-
     admin.initializeApp(); // ייקרא ע"י Application Default Credentials
   }
   // אופציה חלופית: JSON מלא במשתנה סביבה FIREBASE_SA_JSON
