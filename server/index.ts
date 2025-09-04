@@ -24,11 +24,8 @@ const port = process.env.PORT;
 
 app.listen(port, () => console.log(`listening on ${port}`));
 
-
+ app.use(requireFirebaseAuth,verifyUserInDb);
 app.use(express.json());
-app.post('/upsert', handleUserUpsert);
-app.use(requireFirebaseAuth , verifyUserInDb);
-
 app.use('/user', userRoutes);
 app.use('/route', authRoutes);
 app.use('/ideas', ideasRouter);
