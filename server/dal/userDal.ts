@@ -18,8 +18,10 @@ import { Request, Response } from 'express';
             // אם המשתמש קיים, עדכן את הפרטים
             return await this.updateUser(uid, userData);
         } else {
+          
             // אם המשתמש לא קיים, הוסף אותו
-            const result = await database.getPool().query('INSERT INTO users (uid, email, full_name, photo_url, role) VALUES (\$1, \$2, \$3, \$4, \$5) RETURNING *', [uid, userData.email, userData.full_name, userData.photo_url]);
+            const result = await database.getPool().query('INSERT INTO users (uid, email, full_name, photo_url) VALUES (\$1, \$2, \$3, \$4) RETURNING *', [uid, userData.email, userData.full_name, userData.photo_url]);
+
             if (!result.rows || result.rows.length === 0) {
                 return null;
             }

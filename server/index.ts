@@ -6,8 +6,10 @@ import { requireFirebaseAuth } from './middleware/auth';
 import { json } from "body-parser";
 import { ideasRouter } from './routes/ideaRoutes';
 import { sessionsRouter } from './routes/sessionRoutes';
+import { verifyUserInDb } from './middleware/verifyUserInDb';
 import 'dotenv/config';
 import './Firebase'; // מוודא אתחול פעם אחת
+import { handleUserUpsert } from './controllers/userController';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -22,10 +24,13 @@ const port = process.env.PORT;
 
 app.listen(port, () => console.log(`listening on ${port}`));
 
-// app.use(requireFirebaseAuth);
+
 app.use(express.json());
-app.use('/user', userRoutes, requireFirebaseAuth);
-app.use('/route', authRoutes, requireFirebaseAuth);
+app.post('/upsert', handleUserUpsert);
+app.use(requireFirebaseAuth , verifyUserInDb);
+
+app.use('/user', userRoutes);
+app.use('/route', authRoutes);
 app.use('/ideas', ideasRouter);
 app.use('/sessions', sessionsRouter);
 
