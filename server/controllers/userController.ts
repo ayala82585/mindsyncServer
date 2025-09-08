@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import { getUserProfile } from '../service/userService';
 import { updateUser } from '../service/userService';
-import UserDAL from '../dal/userDal';
+// import UserDAL from '../dal/userDal';
 import { createOrUpdateUser } from '../service/userService';
 
 export async function handleUserUpsert(req: Request, res: Response) {
-    const { uid, email, full_name } = req.body;
-    
+     
+
+    const { uid, email, full_name } = req.body || {};
+    console.log("Received upsert request for UID:", uid, "Email:", email, "Full Name:", full_name);
     try {
         const user = await createOrUpdateUser(uid, email, full_name);
         res.status(200).json(user);

@@ -10,11 +10,13 @@ class Database {
       database: 'postgres',
       password: '1111',
       port: 5432,
+      connectionTimeoutMillis: 5000, // זמן מקס' לפתיחת חיבור (מילי־שניות)
+  idleTimeoutMillis: 30000,      // סגירת חיבור לא פעיל
+  max: 20  
         });
     }
 
     public getPool(): Pool {
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111Database pool accessed");
         return this.pool;
     }
 }

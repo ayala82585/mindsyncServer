@@ -7,7 +7,6 @@ import { verifyEmailMiddleware } from '../middleware/verifyEmail';
 const router = express.Router();
 
 router.get('/getMe/:uid', getUserProfileController);
-// router.post('/upsert', handleUserUpsert);
 router.patch('/updateMe/:uid', requireFirebaseAuth, updateUserController);
 router.get('/protected-route', requireFirebaseAuth, (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ message: 'Access granted', user: (req as any).user });

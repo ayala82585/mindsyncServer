@@ -1,18 +1,25 @@
 import { Request, Response, NextFunction } from 'express';
 import { createSessionService, joinSessionService } from '../service/sessionService';
+import { setUserRole } from '../service/userService';
 
 export async function createSessionCtrl(req: Request, res: Response, next: NextFunction) {
   try {
-    ////////////////////////////////////////////////////////////////////////////
     const ownerUid = (req as any).uid;
     const { title, description } = req.body || {};
+
     if (!ownerUid) return res.status(401).json({ error: 'unauthorized' });
+
     if (!title || typeof title !== 'string' || title.trim().length === 0)
       return res.status(400).json({ error: 'title is required' });
+
     if (!description || typeof description !== 'string')
       return res.status(400).json({ error: 'description is required' });
+
     const s = await createSessionService({ title, description, ownerUid });
+    await setUserRole(ownerUid, 'session_owner');
+
     return res.status(201).json(s);
+
   } catch (e) { next(e); }
 }
 

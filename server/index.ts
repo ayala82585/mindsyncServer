@@ -23,13 +23,15 @@ const admin = require('firebase-admin');
 const port = process.env.PORT;
 
 app.listen(port, () => console.log(`listening on ${port}`));
+app.use(express.json());
+
+app.post('/upsert', handleUserUpsert);
 
  app.use(requireFirebaseAuth,verifyUserInDb);
-app.use(express.json());
+ app.use('/sessions', sessionsRouter);
 app.use('/user', userRoutes);
 app.use('/route', authRoutes);
 app.use('/ideas', ideasRouter);
-app.use('/sessions', sessionsRouter);
 
 app.get('/protected-data', requireFirebaseAuth, (req: AuthenticatedRequest, res: Response) => {
   if (!req.user) {
