@@ -20,7 +20,7 @@ if (!admin.apps.length) {
   }
 }
 
-// אימות טוקן Firebase
+// פונקציה לאימות טוקן Firebase
 export async function verifyFirebaseToken(token: string): Promise<{ uid: string, email?: string, full_name?: string }> {
   try {
     const decoded = await admin.auth().verifyIdToken(token);

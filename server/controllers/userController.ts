@@ -34,7 +34,7 @@ const getUserProfileController = async (req: Request, res: Response): Promise<vo
   }
 };
 
-// עדכון פרופיל משתמש
+// Controller לעדכון פרופיל משתמש
 const updateUserController = async (req: Request, res: Response): Promise<void> => {
   const { uid } = req.params;
   const { user } = req.body;
