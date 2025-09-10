@@ -1,24 +1,23 @@
 import UserDal from '../dal/userDal';
+import admin from '../Firebase';
 import { User } from '../models/User';
-import upsertUserFromFirebase from '../dal/userDal';
-import admin from 'firebase-admin';
 
 const userDAL = new UserDal();
 
+// יצירה או עדכון משתמש מבוסס Firebase
 async function createOrUpdateUser(uid: string, email: string, full_name: string): Promise<User | null> {
-    const userDal = new UserDal(); // יצירת מופע של UserDAL
-     const userData: User = {
-    uid, 
+  const userData: User = {
+    uid,
     email,
     full_name,
     photo_url: 'ברירת מחדל',
     created_at: new Date(),
     updated_at: new Date()
-};
-        return await userDal.upsertUserFromFirebase(uid, userData);
-
+  };
+  return await userDAL.upsertUserFromFirebase(uid, userData);
 }
 
+// קבלת פרופיל משתמש לפי Uid
 const getUserProfile = async (uid: string) => {
   try {
     const user = await userDAL.getUserByUid(uid);
@@ -31,8 +30,8 @@ const getUserProfile = async (uid: string) => {
   }
 };
 
+// עדכון פרטי משתמש
 const updateUser = async (uid: string, userData: User) => {
-
   try {
     const user = await userDAL.updateUser(uid, userData);
     if (!user) {
@@ -44,19 +43,11 @@ const updateUser = async (uid: string, userData: User) => {
   }
 };
 
-export async function setUserRole(uid: string, role: string): Promise<void> {
-  // אפשר לשלב לוגיקה עסקית: בדיקות role חוקי וכו'
-  // const claims = { role, admin: role === 'admin' };
-  // await admin.auth().setCustomUserClaims(uid, claims);
-    await admin.auth().setCustomUserClaims(uid, { role });
-    const user = await getUserProfile(uid);
-    const newUser = {
-      ...user,
-      role 
-    };
-    await updateUser(uid, newUser);
+// הגדרת תפקיד למשתמש ועדכון ה-claims ב-Firebase
+async function setUserRole(targetUid: string, newRole: string) {
+  
+  await admin.auth().setCustomUserClaims(targetUid, { role: newRole });
+  await userDAL.updateUserRole(targetUid, newRole);
 }
 
-
-
-export { getUserProfile, updateUser , createOrUpdateUser };
+export { getUserProfile, updateUser, createOrUpdateUser, setUserRole };

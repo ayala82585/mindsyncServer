@@ -6,7 +6,7 @@ export interface User {
   photo_url: string | null;
   created_at: Date;
   updated_at: Date;
-  is_verified?: boolean; // שדה אופציונלי לסימון אימות דוא"ל
+  is_verified?: boolean; 
 }
 
 

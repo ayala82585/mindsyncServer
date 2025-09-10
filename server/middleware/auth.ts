@@ -1,26 +1,22 @@
 import { Request, Response, NextFunction } from "express";
-import * as admin from "firebase-admin"; // Import firebase-admin
-import { verifyFirebaseToken, verifyIdToken } from "../Firebase";
+import { verifyFirebaseToken } from "../Firebase";
 
-// ----------------------
 // אימות Firebase רגיל
-// ----------------------
 export async function requireFirebaseAuth(req: Request, res: Response, next: NextFunction) {
   try {
-    const header = req.headers.authorization || "";                         // קבלת כותרת Authorization
-    const idToken = header.startsWith("Bearer ") ? header.slice(7) : "";    // חילוץ הטוקן
-    if (!idToken) return res.status(401).json({ error: "missing id token" }); // אין טוקן -> 401
-
-    const decoded = await verifyFirebaseToken(idToken);                            // אימות מול Firebase
-    (req as any).uid = decoded.uid;                                          // שמירת UID ל־request
-    (req as any).firebaseDecoded = decoded;                                  // אפשר לשמור את ה-decoded לשימוש נוסף
+    const header = req.headers.authorization || "";                         
+    const idToken = header.startsWith("Bearer ") ? header.slice(7) : ""; 
+    if (!idToken) 
+      return res.status(401).json({ error: "missing id token" }); 
+    const decoded = await verifyFirebaseToken(idToken);
+    (req as any).uid = decoded.uid;                    
+    (req as any).firebaseDecoded = decoded;                                
     next();
-  } catch (error: any) {
-    console.error("Authentication Error:", error.code, error.message);
-
+  } 
+  catch (error: any) {
+    console.error("Authenticationnn Error:", error.code, error.message);
     let errorMessage = "Authentication failed.";
-    let statusCode = 401; // Unauthorized
-
+    let statusCode = 401; 
     switch (error.code) {
       case "auth/argument-error":
         errorMessage = "Invalid ID token provided.";
@@ -35,32 +31,25 @@ export async function requireFirebaseAuth(req: Request, res: Response, next: Nex
         errorMessage = "The user associated with this token is disabled.";
         break;
       default:
-        // Generic error for other unexpected issues
         errorMessage = "Failed to authenticate token.";
         break;
     }
-
     return res.status(statusCode).json({ error: errorMessage });
   }
 }
 
-// ----------------------
 // אימות Firebase + דרישת MFA
-// ----------------------
 export async function requireFirebaseAuthWithMfa(req: Request, res: Response, next: NextFunction) {
   try {
     const header = req.headers.authorization || "";
     const idToken = header.startsWith("Bearer ") ? header.slice(7) : "";
-    if (!idToken) return res.status(401).json({ error: "missing id token" });
-
+    if (!idToken)
+       return res.status(401).json({ error: "missing id token" });
     const decoded = await verifyFirebaseToken(idToken);
-
-    // בדיקה האם ה־decoded מכיל אינדיקציה שהשיחה כללה second factor
     const mfaInfo = (decoded as any).firebase?.sign_in_second_factor;
     if (!mfaInfo) {
       return res.status(403).json({ error: "mfa required" });
     }
-
     (req as any).uid = decoded.uid;
     (req as any).firebaseDecoded = decoded;
     next();
