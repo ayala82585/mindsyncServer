@@ -5,14 +5,16 @@ class Database {
 
     constructor() {
         this.pool = new Pool({
-      user: 'postgres',
-      host: 'localhost',
-      database: 'postgres',
-      password: '1111',
-      port: 5432,
-      connectionTimeoutMillis: 5000, // זמן מקס' לפתיחת חיבור (מילי־שניות)
-  idleTimeoutMillis: 30000,      // סגירת חיבור לא פעיל
-  max: 20  
+            user: process.env.user,
+            host: process.env.host,
+            database: process.env.database,
+            password: process.env.password,
+            // port: process.env.port,
+            port: 5432,
+            connectionTimeoutMillis: 5000,
+            idleTimeoutMillis: 30000,
+            // max: process.env.max,
+
         });
     }
 
@@ -20,8 +22,6 @@ class Database {
         return this.pool;
     }
 }
-
-
 
 export default new Database();
 
