@@ -1,9 +1,16 @@
 import UserDAL from '../dal/userDal';
 import admin from '../Firebase';
 
-const userDal = new UserDAL();
+ const userDal = new UserDAL();
 
-// בדיקת סטטוס אימות אימייל וסינכרון אם צריך
+export async function setUserRole(uid: string, newRole: string) {
+    
+  await admin.auth().setCustomUserClaims(uid, { role: newRole });
+
+  await userDal.updateUserRole(uid, newRole);
+
+}
+
 export async function checkAndSyncEmailVerified(uid: string): Promise<{
   dbVerified: boolean | null;
   firebaseVerified: boolean;

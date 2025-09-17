@@ -1,37 +1,29 @@
-
 import authRoutes from './routes/authRoutes';
 import express, { Request, Response } from 'express';
 import userRoutes from './routes/userRoutes';
 import { requireFirebaseAuth } from './middleware/auth';
 import { ideasRouter } from './routes/ideaRoutes';
 import { sessionsRouter } from './routes/sessionRoutes';
-import { verifyUserInDb } from './middleware/verifyUserInDb';
-import aiRoutes from './routes/aiRoutes';
-
 import 'dotenv/config';
-import './Firebase'; 
-
-interface AuthenticatedRequest extends Request {
-  user?: {
-    uid: string;
-    email: string | null;
-  };
-}
+import './Firebase'; // מוודא אתחול פעם אחת
+import { verifyUserInDb } from './middleware/verifyUserInDb';
+import aiRoutes from "./routes/aiRoutes";
 
 const app = express();  
+const admin = require('firebase-admin');
 const port = process.env.PORT;
-
 app.listen(port, () => console.log(`listening on ${port}`));
-app.use(express.json());
 
-app.use('/auth', authRoutes);
+//  app.use(requireFirebaseAuth,verifyUserInDb);
+app.use(express.json());
 app.use('/user', userRoutes);
+app.use('/route', authRoutes);
+app.use('/ideas', ideasRouter);
 app.use('/sessions', sessionsRouter);
 app.use('/ideas', ideasRouter);
 app.use("/ai", aiRoutes);
 
-app.use(requireFirebaseAuth, verifyUserInDb);
-app.get('/protected-data', (req: AuthenticatedRequest, res: Response) => {
+app.get('/protected-data', requireFirebaseAuth, (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(500).json({ error: "Authenticated user information not found." });
   }

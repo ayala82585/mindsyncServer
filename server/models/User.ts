@@ -6,9 +6,9 @@ export interface User {
   photo_url: string | null;
   created_at: Date;
   updated_at: Date;
-  is_verified?: boolean; 
-  aiSessionCredits: number;
-  aiMode: "free" | "paid";
+  is_verified?: boolean;
+  aisessioncredits: number;
+  aimode: "free" | "paid";
 }
 
 

@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import { verifyFirebaseToken } from '../Firebase';
 import { createOrUpdateUser } from '../service/userService';
@@ -47,4 +46,5 @@ export async function verifyEmailStatusController(req: Request, res: Response) {
     return res.status(500).json({ error: err?.message || 'verify email failed' });
   }
 }
+
 
