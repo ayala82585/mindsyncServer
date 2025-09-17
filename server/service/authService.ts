@@ -29,10 +29,3 @@ export async function checkAndSyncEmailVerified(uid: string): Promise<{
   // 4) לא מאומת ב-Firebase
   return { dbVerified: !!dbFlag, firebaseVerified: false, synced: false };
 }
-
-
-
-
-
-
-
