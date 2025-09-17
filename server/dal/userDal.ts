@@ -76,7 +76,7 @@ class UserDAL {
     try {
       const sql = 'UPDATE users SET role = $1, updated_at = NOW() WHERE uid = $2';
       await this.pool.query(sql, [role, uid]);
-    } 
+    }
     catch (error) {
       console.error('Failed to update user role in DB:', error);
       throw error;
@@ -97,5 +97,19 @@ class UserDAL {
     const sql = 'UPDATE users SET is_verified = TRUE, updated_at = NOW() WHERE uid = $1';
     await this.pool.query(sql, [uid]);
   }
+
+  // הורדת קרדיטים מחשבון המשתמש
+ public decrementCredits = async (userId: string, amount: number) => {
+    const sql = `
+      UPDATE users
+      SET aiSessionCredits = aiSessionCredits - $1,
+          updated_at = NOW()
+      WHERE id = $2 AND aiSessionCredits >= $1
+      RETURNING *`;
+    const { rows } = await this.pool.query(sql, [amount, userId]);
+    if (rows.length === 0) throw new Error("אין קרדיטים זמינים");
+    return rows[0];
+  };
+
 }
 export default UserDAL;

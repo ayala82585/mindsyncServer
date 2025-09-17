@@ -6,6 +6,8 @@ import { requireFirebaseAuth } from './middleware/auth';
 import { ideasRouter } from './routes/ideaRoutes';
 import { sessionsRouter } from './routes/sessionRoutes';
 import { verifyUserInDb } from './middleware/verifyUserInDb';
+import aiRoutes from './routes/aiRoutes';
+
 import 'dotenv/config';
 import './Firebase'; 
 
@@ -26,6 +28,7 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/sessions', sessionsRouter);
 app.use('/ideas', ideasRouter);
+app.use("/ai", aiRoutes);
 
 app.use(requireFirebaseAuth, verifyUserInDb);
 app.get('/protected-data', (req: AuthenticatedRequest, res: Response) => {
