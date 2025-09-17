@@ -8,9 +8,11 @@ export async function requireFirebaseAuth(req: Request, res: Response, next: Nex
     const idToken = header.startsWith("Bearer ") ? header.slice(7) : ""; 
     if (!idToken) 
       return res.status(401).json({ error: "missing id token" }); 
+    
     const decoded = await verifyFirebaseToken(idToken);
-    (req as any).uid = decoded.uid;                    
-    (req as any).firebaseDecoded = decoded;                                
+    
+    req.uid = decoded.uid;                    
+    req.firebaseDecoded = decoded;
     next();
   } 
   catch (error: any) {
@@ -50,8 +52,11 @@ export async function requireFirebaseAuthWithMfa(req: Request, res: Response, ne
     if (!mfaInfo) {
       return res.status(403).json({ error: "mfa required" });
     }
-    (req as any).uid = decoded.uid;
-    (req as any).firebaseDecoded = decoded;
+    req.firebaseDecoded = decoded;
+    req.uid = decoded.uid;                    
+
+
+    
     next();
   } catch (e) {
     return res.status(401).json({ error: "invalid id token" });
