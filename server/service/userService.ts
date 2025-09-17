@@ -7,13 +7,16 @@ const userDAL = new UserDal();
 // פונקציה ליצירה או עדכון משתמש מבוסס Firebase                                 
 async function createOrUpdateUser(uid: string, email: string, full_name: string): Promise<User | null> {
      const userData: User = {
-    uid, 
-    email,
-    full_name,
-    photo_url: 'ברירת מחדל',
-    created_at: new Date(),
-    updated_at: new Date()
-};
+       uid,
+       email,
+       full_name,
+       photo_url: 'ברירת מחדל',
+       created_at: new Date(),
+       updated_at: new Date(),
+       aisessioncredits: 10,
+       aimode: 'free'
+     };
+
         return await userDAL.upsertUserFromFirebase(uid, userData);
 
 }
