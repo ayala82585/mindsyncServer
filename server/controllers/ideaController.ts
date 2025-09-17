@@ -4,9 +4,14 @@ import { createIdeaService, fetchSessionIdeas, incrementReaction } from '../serv
 // יצירת רעיון חדש
 async function createIdeaCtrl(req: Request, res: Response, next: NextFunction) {
   try {
-    const uid = (req as any).uid;
-    const { sessionId, text } = req.body || {};
-    const sid = Number(sessionId);
+    const uid = req.user?.uid;
+
+    const { sessionId, text } = req.body;
+    const sid = parseInt(sessionId, 10);
+    if (isNaN(sid)) {
+      return res.status(400).json({ error: 'sessionId must be a valid number' });
+    }
+
 
     if (!uid)
       return res.status(401).json({ error: 'unauthorized' });

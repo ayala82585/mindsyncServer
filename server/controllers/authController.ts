@@ -47,7 +47,4 @@ export async function verifyEmailStatusController(req: Request, res: Response) {
   }
 }
 
-// function changeUserRole(uid: any, newRole: any) {
-//   throw new Error('Function not implemented.');
-// }
 
