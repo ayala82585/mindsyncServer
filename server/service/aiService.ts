@@ -1,3 +1,4 @@
+
 import userDAL from "../dal/userDal";
 
 interface AIRequestParams {
@@ -6,26 +7,30 @@ interface AIRequestParams {
     mode: "summarize" | "cluster";
 }
 
-const userDal = new userDAL();
+const userdal = new userDAL();
 
-// טיפול בבקשת AI עם בדיקות קרדיטים ותפקיד
 export const handleAIRequest = async ({ userId, sessionOwnerId, mode }: AIRequestParams) => {
+
     if (userId !== sessionOwnerId) {
         throw new Error("רק מנהל הסשן יכול לבצע קריאה ל-AI");
     }
-    const user = await userDal.getUserByUid(userId);
 
-    if (!user || user.aiSessionCredits <= 0) {
+    const user = await userdal.getUserByUid(userId);
+
+    if (!user || user.aisessioncredits <= 0) {
         throw new Error("אין קרדיטים זמינים");
     }
 
+    console.log("oooo" + user.aimode);
+
     const model =
-        user.aiMode === "paid"
+        user.aimode === "paid"
             ? mode === "summarize"
                 ? "gpt-4o"
                 : "gpt-3.5-turbo"
             : "gpt-3.5-turbo";
-            
-    await userDal.decrementCredits(userId, 1);
+
+    await userdal.decrementCredits(userId, 1);
+
     return { modelUsed: model };
 };

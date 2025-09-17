@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { getUserProfile } from '../service/userService';
-import { updateUser } from '../service/userService';
-import { createOrUpdateUser } from '../service/userService';
-import { setUserRole } from '../service/userService';
+import { getUserProfile ,setUserRole ,createOrUpdateUser,updateUser} from '../service/userService';
+
 
 // טיפול בבקשה ליצירה או עדכון משתמש
 async function handleUserUpsert(req: Request, res: Response) {
   const { uid, email, full_name } = req.body || {};
   try {
+
     const user = await createOrUpdateUser(uid, email, full_name);
+    
     res.status(200).json(user);
   } catch (error) {
     console.error("Error in handleUserUpsert:", error);
@@ -34,7 +34,7 @@ const getUserProfileController = async (req: Request, res: Response): Promise<vo
   }
 };
 
-// עדכון פרופיל משתמש
+// Controller לעדכון פרופיל משתמש
 const updateUserController = async (req: Request, res: Response): Promise<void> => {
   const { uid } = req.params;
   const { user } = req.body;
