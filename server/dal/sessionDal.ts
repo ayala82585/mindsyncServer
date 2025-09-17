@@ -31,9 +31,7 @@ export async function addParticipant(sessionId: number, userId: string): Promise
 
 // בדיקת קיום סשן לפי מזהה
 export async function sessionExists(sessionId: number): Promise<sessions | null> {
-  
+
   const r = await pool.query(`SELECT * FROM sessions WHERE id=$1`, [sessionId]);
-  console.log(r.rows[0]);
-  
   return r.rowCount !== null && r.rowCount > 0 ? r.rows[0] : null;
 }
