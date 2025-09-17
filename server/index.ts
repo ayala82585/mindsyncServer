@@ -7,28 +7,23 @@ import { sessionsRouter } from './routes/sessionRoutes';
 import 'dotenv/config';
 import './Firebase'; // מוודא אתחול פעם אחת
 import { verifyUserInDb } from './middleware/verifyUserInDb';
-
-interface AuthenticatedRequest extends Request {
-  user?: {
-    uid: string;
-    email: string | null;
-  };
-}
+import aiRoutes from "./routes/aiRoutes";
 
 const app = express();  
 const admin = require('firebase-admin');
 const port = process.env.PORT;
 app.listen(port, () => console.log(`listening on ${port}`));
 
- app.use(requireFirebaseAuth,verifyUserInDb);
+//  app.use(requireFirebaseAuth,verifyUserInDb);
 app.use(express.json());
 app.use('/user', userRoutes);
 app.use('/route', authRoutes);
 app.use('/ideas', ideasRouter);
 app.use('/sessions', sessionsRouter);
 app.use('/ideas', ideasRouter);
+app.use("/ai", aiRoutes);
 
-app.get('/protected-data', requireFirebaseAuth, (req: AuthenticatedRequest, res: Response) => {
+app.get('/protected-data', requireFirebaseAuth, (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(500).json({ error: "Authenticated user information not found." });
   }

@@ -5,7 +5,7 @@ import { setUserRole } from '../service/userService';
 // יצירת סשן חדש
 async function createSessionCtrl(req: Request, res: Response, next: NextFunction) {
   try {
-    const ownerUid = (req as any).uid;
+    const ownerUid = req.user?.uid;
     const { title, description } = req.body || {};
 
     if (!ownerUid)
@@ -31,7 +31,7 @@ async function createSessionCtrl(req: Request, res: Response, next: NextFunction
 async function joinSessionCtrl(req: Request, res: Response, next: NextFunction) {
 
   try {
-    const uid = (req as any).uid;
+    const uid = req.user?.uid;
     const sid = Number(req.params.id);
 
     if (!uid)

@@ -18,7 +18,7 @@ export async function verifyEmailMiddleware(
     if (!user.emailVerified) {
       return res.status(403).send("Email not verified");
     }
-    (req as any).user = user;
+    req.firebaseUser = user;          // אחרי
     next();
   } catch (err) {
     console.error(err);
