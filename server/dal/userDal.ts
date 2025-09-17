@@ -77,9 +77,8 @@ class UserDAL {
       const sql = 'UPDATE users SET role = $1, updated_at = NOW() WHERE uid = $2';
 
       await this.pool.query(sql, [role, uid]);
-      console.log(`Updating role for user ${uid} to ${role}`);
-
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Failed to update user role in DB:', error);
       throw error;
     }

@@ -1,6 +1,4 @@
-# Ignore node_modules
 /node_modules
-# Ignore package-lock.json
 package-lock.json
 tsconfig.json
 .env
@@ -15,3 +13,4 @@ getToken.ts
 /fireToken/node_modules
 enable-totp.js
 mindsync-b978b-firebase-adminsdk-fbsvc-1951ea9b09.json
+mindsync-b978b-firebase-adminsdk-fbsvc-031f8c44f0.json
