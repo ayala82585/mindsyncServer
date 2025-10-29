@@ -1,15 +1,17 @@
 
+import { logAIUsage } from "../dal/aiDal";
 import userDAL from "../dal/userDal";
 
 interface AIRequestParams {
     userId: string;
     sessionOwnerId: string;
     mode: "summarize" | "cluster";
+    session_id: number;
 }
 
 const userdal = new userDAL();
-
-export const handleAIRequest = async ({ userId, sessionOwnerId, mode }: AIRequestParams) => {
+//
+export const handleAIRequest = async ({ userId, sessionOwnerId, mode ,session_id}: AIRequestParams) => {
 
     if (userId !== sessionOwnerId) {
         throw new Error("רק מנהל הסשן יכול לבצע קריאה ל-AI");
@@ -32,5 +34,12 @@ export const handleAIRequest = async ({ userId, sessionOwnerId, mode }: AIReques
 
     await userdal.decrementCredits(userId, 1);
 
+    await logAIUsage({
+        userId,
+        sessionId: session_id, // או אולי sessionId אמיתי אם קיים
+        modelUsed: model,
+        mode,
+        tokensUsed: 1, // 🟡 כאן שימי את מספר הטוקנים האמיתי מהמודל
+    });
     return { modelUsed: model };
 };
