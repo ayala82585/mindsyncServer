@@ -13,6 +13,7 @@ router.use(requireFirebaseAuth, verifyUserInDb);
 
 router.get('/getMe/:uid', getUserProfileController);
 router.patch('/updateMe/:uid', updateUserController);
-router.post('/change-role', requireAdmin, setRoleAndClaimsController); 
+// router.post('/change-role', requireAdmin, setRoleAndClaimsController); 
+ router.post('/change-role', setRoleAndClaimsController); 
 
 export default router;

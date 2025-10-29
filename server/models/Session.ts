@@ -3,6 +3,7 @@ export interface sessions {
     title: string,
     description: string,
     owner_id: string,
-    createdAt: Date
+    createdAt: Date,
+    password_hash: string
 };
 	

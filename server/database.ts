@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 
 class Database {
+    
     private pool: Pool;
 
     constructor() {

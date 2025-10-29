@@ -4,14 +4,14 @@ import { sessions } from '../models/Session';
 const pool = database.getPool();
  
 // הוספת סשן חדש והחזרת הפרטים שלו
-export async function insertSession(title: string, description: string, ownerUid: string): Promise<sessions> {
+export async function insertSession(title: string, description: string,passwordHash: string, ownerUid: string): Promise<sessions> {
 
   const sql = `
-    INSERT INTO sessions (title, description, owner_id)
-    VALUES ($1, $2, $3)
-    RETURNING id, title, description, owner_id as "ownerId", created_at as "createdAt"
+    INSERT INTO sessions (title, description,password_hash, owner_id)
+    VALUES ($1, $2, $3, $4)
+    RETURNING id, title, description, password_hash as "passwordHash",owner_id as "ownerId", created_at as "createdAt"
   `;
-  const r = await pool.query(sql, [title, description, ownerUid]);
+  const r = await pool.query(sql, [title, description,passwordHash, ownerUid]);
   
   return r.rows[0];
 }
