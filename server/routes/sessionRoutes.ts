@@ -6,6 +6,5 @@ import { verifyUserInDb } from '../middleware/verifyUserInDb';
 export const sessionsRouter = Router();
 
 sessionsRouter.use(requireFirebaseAuth, verifyUserInDb);
-
-sessionsRouter.post('/', createSessionCtrl);
+sessionsRouter.post('/createSession', createSessionCtrl);
 sessionsRouter.post('/:id/join', joinSessionCtrl);

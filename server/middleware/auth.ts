@@ -6,6 +6,7 @@ export async function requireFirebaseAuth(req: Request, res: Response, next: Nex
   try {
     const header = req.headers.authorization || "";                         
     const idToken = header.startsWith("Bearer ") ? header.slice(7) : ""; 
+    
     if (!idToken) 
       return res.status(401).json({ error: "missing id token" }); 
     

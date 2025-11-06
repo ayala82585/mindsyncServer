@@ -3,7 +3,7 @@ import crypto from 'crypto';
 const SESSION_SECRET_KEY = process.env.SESSION_SECRET_KEY!;
 const algorithm = 'aes-256-cbc';
 const KEY_SALT = process.env.KEY_SALT !;
-const key = crypto.scryptSync(SESSION_SECRET_KEY, KEY_SALT, 32);
+const key = crypto.pbkdf2Sync(SESSION_SECRET_KEY, KEY_SALT, 16384, 32, 'sha256');
 const ivLength = 16;
 
 

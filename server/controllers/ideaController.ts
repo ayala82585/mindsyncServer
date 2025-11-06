@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { createIdeaService, fetchSessionIdeas, incrementReaction } from '../service/ideaService';
+import { io } from '../index'; // או מהנתיב הרלוונטי
 
 // יצירת רעיון חדש
 async function createIdeaCtrl(req: Request, res: Response, next: NextFunction) {
@@ -26,29 +27,32 @@ async function createIdeaCtrl(req: Request, res: Response, next: NextFunction) {
     }
 
     const idea = await createIdeaService({ sessionId: sid, authorId: uid, text });
+    io.to(`session_${sid}`).emit('newIdea', idea);
+    console.log('📤 שידור רעיון חדש לחדר:', `session_${sid}`);
+
     return res.status(201).json(idea);
   }
   catch (e) { next(e); }
 }
 
 // קבלת רעיונות לפי מזהה session, עם אפשרות לסינון לפי זמן
-const getIdeasBySession = async (req: Request, res: Response) => {
+// const getIdeasBySession = async (req: Request, res: Response) => {
 
-  try {
-    const sessionId = req.params.sessionId;
-    const since = req.query.since as string | undefined;
+//   try {
+//     const sessionId = req.params.sessionId;
+//     const since = req.query.since as string | undefined;
 
-    if (!sessionId)
-      return res.status(400).json({ error: "Missing sessionId" });
+//     if (!sessionId)
+//       return res.status(400).json({ error: "Missing sessionId" });
 
-    const ideas = await fetchSessionIdeas(Number(sessionId), since);
-    res.json(ideas);
+//     const ideas = await fetchSessionIdeas(Number(sessionId), since);
+//     res.json(ideas);
 
-  } catch (err) {
-    console.error("Error fetching ideas:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+//   } catch (err) {
+//     console.error("Error fetching ideas:", err);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
 
 // הוספת תגובה לרעיון (כגון לייק, אהבתי, וכו')
 const reactToIdea = async (req: Request, res: Response) => {
@@ -69,4 +73,5 @@ const reactToIdea = async (req: Request, res: Response) => {
   }
 };
 
-export { createIdeaCtrl, getIdeasBySession, reactToIdea };
+export { createIdeaCtrl, reactToIdea };
+//, getIdeasBySession

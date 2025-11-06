@@ -8,21 +8,30 @@ import 'dotenv/config';
 import './Firebase'; // מוודא אתחול פעם אחת
 import { verifyUserInDb } from './middleware/verifyUserInDb';
 import aiRoutes from "./routes/aiRoutes";
+import { swaggerSpec } from "./swagger";
+import swaggerUi from "swagger-ui-express";
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 
 const app = express();  
 const admin = require('firebase-admin');
+const server = http.createServer(app);
+const io = new SocketIOServer(server, {
+  cors: { origin: 'http://localhost:3000' } // התאימי את ה-origin לפי הצורך
+});
+
 const port = process.env.PORT;
-app.listen(port, () => console.log(`listening on ${port}`));
+server.listen(port, () => console.log(`Server listening on ${port}`));
 
 //  app.use(requireFirebaseAuth,verifyUserInDb);
 app.use(express.json());
 app.use('/user', userRoutes);
-app.use('/route', authRoutes);
+app.use('/auth', authRoutes);
 app.use('/ideas', ideasRouter);
 app.use('/sessions', sessionsRouter);
 app.use('/ideas', ideasRouter);
 app.use("/ai", aiRoutes);
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/protected-data', requireFirebaseAuth, (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(500).json({ error: "Authenticated user information not found." });
@@ -36,3 +45,18 @@ app.get('/protected-data', requireFirebaseAuth, (req: Request, res: Response) =>
     data_access: "You have successfully accessed protected data!"
   });
 });
+
+io.on('connection', (socket) => {
+  console.log('Socket connected:', socket.id);
+
+  socket.on('joinSession', (sessionId) => {
+    socket.join(`session_${sessionId}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Socket disconnected:', socket.id);
+  });
+});
+
+// ייצוא socket.io לשימוש פנימי
+export { io };

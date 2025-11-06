@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { handleAIRequest } from "../service/aiService";
 import { sessionExists } from "../dal/sessionDal"; // בהנחה שיש DAL ל-sessions
 
+// Controller לטיפול בבקשות AI
 export const processAI = async (req: Request, res: Response) => {
 try {
   

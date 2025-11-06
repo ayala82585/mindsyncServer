@@ -9,9 +9,9 @@ const router = Router();
 
 router.use(requireFirebaseAuth,verifyUserInDb);
 
-router.post('/verify-token', verifyTokenController);
+router.get('/verify-token', verifyTokenController);
 
-router.get("/protected", verifyEmailMiddleware, (req: Request, res: Response) => {
+router.get("/verify-Email", verifyEmailMiddleware, (req: Request, res: Response) => {
 const user = req.user;
 
 if (!user) {
