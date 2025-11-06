@@ -53,15 +53,17 @@ export const deleteResponse = async (id: number) => {
     throw error;
   }
 };
-// export const getResponsesByIdea = async (idea_id: number) => {
-//   try {
-//     const result = await pool.query(
-//       `SELECT * FROM idea_responses WHERE idea_id = $1 ORDER BY created_at ASC`,
-//       [idea_id]
-//     );
-//     return result.rows;
-//   } catch (error) {
-//     console.error("Error in getResponsesByIdea:", error);
-//     throw error;
-//   }
-// };
+
+// פונקציה לקבלת כל התגובות לרעיון מסוים
+export const getResponsesByIdea = async (idea_id: number) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM idea_responses WHERE idea_id = $1 ORDER BY created_at ASC`,
+      [idea_id]
+    );
+    return result.rows;
+  } catch (error) {
+    console.error("Error in getResponsesByIdea:", error);
+    throw error;
+  }
+};

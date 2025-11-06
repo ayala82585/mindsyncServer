@@ -12,6 +12,7 @@ import { swaggerSpec } from "./swagger";
 import swaggerUi from "swagger-ui-express";
 import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
+import IdeaResponseRoutes from './routes/IdeaResponseRoutes';
 
 const app = express();  
 const admin = require('firebase-admin');

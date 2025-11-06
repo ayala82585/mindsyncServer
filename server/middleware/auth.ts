@@ -6,14 +6,18 @@ export async function requireFirebaseAuth(req: Request, res: Response, next: Nex
   try {
     const header = req.headers.authorization || "";                         
     const idToken = header.startsWith("Bearer ") ? header.slice(7) : ""; 
-    
+
+            console.log("ppppppppppppppppppppppppppppppp");
+
     if (!idToken) 
       return res.status(401).json({ error: "missing id token" }); 
-    
+
     const decoded = await verifyFirebaseToken(idToken);
-    
+                console.log("ttttttttttttttttttttttttttt");
+
     req.uid = decoded.uid;                    
     req.firebaseDecoded = decoded;
+    
     next();
   } 
   catch (error: any) {

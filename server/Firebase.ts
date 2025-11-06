@@ -25,13 +25,13 @@ export async function verifyFirebaseToken(token: string): Promise<{ uid: string,
   try {
 
     const decoded = await admin.auth().verifyIdToken(token);
-    
+
     return decoded;
   } catch (error) {
     throw new Error('Invalid Firebase token');
   }
 }
 
-export const verifyIdToken = (idToken: string) => admin.auth().verifyIdToken(idToken);
+// export const verifyIdToken = (idToken: string) => admin.auth().verifyIdToken(idToken);
 
 export default admin;

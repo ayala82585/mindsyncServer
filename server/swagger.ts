@@ -292,6 +292,35 @@ const options: swaggerJSDoc.Options = {
           },
         }
       }},
+      "/ideaResponse/create": {
+  "post": {
+    "summary": "Create idea response (text OR emoji)",
+    "tags": ["ideaResponse"],
+    "security": [{ "bearerAuth": [] }],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "idea_id": { "type": "integer" },
+              "user_id": { "type": "string", "format": "uuid" },
+              "emoji": { "type": "string" },
+              "text": { "type": "string" }
+            },
+            "oneOf": [
+              { "required": ["idea_id", "user_id", "emoji"] },
+              { "required": ["idea_id", "user_id", "text"] }
+            ]
+          }
+        }
+      }
+    },"responses": {
+      "201": { "description": "Response created successfully" }
+    }
+  }
+},
   }
 },
   apis: ["src/**/*.ts"] // הנתיבים שבהם הקבצים שלך
