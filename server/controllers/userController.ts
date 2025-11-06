@@ -5,6 +5,7 @@ import { getUserProfile ,setUserRole ,createOrUpdateUser} from '../service/userS
 // טיפול בבקשה ליצירה או עדכון משתמש
 async function handleUserUpsert(req: Request, res: Response) {
   const { uid, email, full_name } = req.body || {};
+
   try {
 
     const user = await createOrUpdateUser(uid, email, full_name);

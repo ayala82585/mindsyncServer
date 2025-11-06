@@ -12,8 +12,6 @@ async function createIdeaCtrl(req: Request, res: Response, next: NextFunction) {
     if (isNaN(sid)) {
       return res.status(400).json({ error: 'sessionId must be a valid number' });
     }
-
-
     if (!uid)
       return res.status(401).json({ error: 'unauthorized' });
     if (!Number.isInteger(sid))
@@ -21,7 +19,7 @@ async function createIdeaCtrl(req: Request, res: Response, next: NextFunction) {
     if (!text || typeof text !== 'string' || text.trim().length === 0)
       return res.status(400).json({ error: 'text is required' });
 
-    const MAX_CHARS = 5;
+    const MAX_CHARS = 50;
     if (text.length > MAX_CHARS) {
       return res.status(400).json({ error: `Idea text must not exceed ${MAX_CHARS} characters` });
     }

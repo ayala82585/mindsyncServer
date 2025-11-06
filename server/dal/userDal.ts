@@ -65,7 +65,7 @@ class UserDAL {
       const result = await this.pool.query('UPDATE users SET email = $1, full_name = $2, photo_url = $3, role = $4 WHERE uid = $5 RETURNING *', [userData.email, userData.full_name, userData.photo_url, "user", uid]);
       if (!result.rows || result.rows.length === 0) {
         return null; // משתמש לא נמצא לעדכון
-      }
+      }      
       return result.rows[0];
     } catch (error) {
       throw error;
