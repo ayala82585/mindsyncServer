@@ -31,6 +31,7 @@ app.use('/ideas', ideasRouter);
 app.use('/sessions', sessionsRouter);
 app.use('/ideas', ideasRouter);
 app.use("/ai", aiRoutes);
+app.use("/ideaResponse", IdeaResponseRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/protected-data', requireFirebaseAuth, (req: Request, res: Response) => {
   if (!req.user) {

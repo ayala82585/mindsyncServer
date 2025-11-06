@@ -9,6 +9,7 @@ export interface User {
   is_verified?: boolean;
   aisessioncredits: number;
   aimode: "free" | "paid";
+  phone: string;
 }
 
 

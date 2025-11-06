@@ -39,8 +39,10 @@ const options: swaggerJSDoc.Options = {
                   "uid": { "type": "string" },
                     "email": { "type": "string" },
                     "full_name": { "type": "string" },
+                    "photo_url": { "type": "string" },
+                    "phone": { "type": "string" }
                 },
-                "required": ["uid", "email", "full_name"]
+                "required": ["uid", "email", "full_name", "photo_url", "phone"]
               }
             }
           }
@@ -269,7 +271,6 @@ const options: swaggerJSDoc.Options = {
           }
         }
       }},
-
       "/auth/verify-email-status/{uid}": {
       "get": {
         "summary": "verify email",
