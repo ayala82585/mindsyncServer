@@ -1,25 +1,25 @@
 import { addParticipant, insertSession, sessionExists } from '../dal/sessionDal';
 import { sessions } from '../models/Session';
 import { encrypt } from '../utils/crypto';
-import { hashPassword } from '../utils/hash';
-import { verifyPassword } from '../utils/hash';
+import { hashPassword, verifyPassword } from '../utils/hash';
+
 
 // יצירת סשן חדש
-async function createSessionService(params: { title: string; description: string; password: string;ownerUid: string; }): Promise<sessions> {
+async function createSessionService(params: { title: string; description: string; password: string; ownerUid: string; }): Promise<sessions> {
 
-  const { title, description, password ,ownerUid } = params;
-    
+  const { title, description, password, ownerUid } = params;
+
   const passwordHash = await hashPassword(password);
 
-  const s = await insertSession(title.trim(), description,passwordHash, ownerUid);
-
+  const s = await insertSession(title.trim(), description, passwordHash, ownerUid);
+  // generateSessionJoinLink(s.id);
   await addParticipant(s.id, ownerUid);
   //generateSessionJoinLink(s.id , password );
   return s;
 }
 
 // הצטרפות לסשן קיים
-async function joinSessionService(sessionId: number,password:string, userId: string): Promise<'created' | 'exists'> {
+async function joinSessionService(sessionId: number, password:string, userId: string): Promise<'created' | 'exists'> {
 
   const exists = await sessionExists(sessionId);
 
