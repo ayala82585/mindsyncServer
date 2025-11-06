@@ -26,13 +26,10 @@ export async function checkAndSyncEmailVerified(uid: string): Promise<{
   const fbVerified = !!userRecord.emailVerified;
   // 3) אם FB מאומת ו-DB לא – עדכן DB
   if (fbVerified) {
-    if (dbFlag === false) {
       await userDal.setVerified(uid);
       return { dbVerified: true, firebaseVerified: true, synced: true };
+      console.log('User exists in DB but is not verified', dbFlag);
     }
-    console.log('User exists in DB but is not verified', dbFlag);
-    return { dbVerified: false, firebaseVerified: true, synced: false };
-  }
   // 4) לא מאומת ב-Firebase
   return { dbVerified: !!dbFlag, firebaseVerified: false, synced: false };
 }

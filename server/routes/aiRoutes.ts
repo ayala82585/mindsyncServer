@@ -6,9 +6,8 @@ import { verifyUserInDb } from "../middleware/verifyUserInDb";
 
 const router = express.Router();
 
- router.use(requireFirebaseAuth,verifyUserInDb);
+router.use(requireFirebaseAuth,verifyUserInDb);
 
 router.post("/process", processAI);
-
 
 export default router;

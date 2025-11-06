@@ -5,12 +5,13 @@ import { checkAndSyncEmailVerified } from '../service/authService';
 
 // אימות טוקן Firebase
 export async function verifyTokenController(req: Request, res: Response) {
-  const token = req.body.token;
-  if (!token) {
+const header = req.headers.authorization || "";                         
+    const idToken = header.startsWith("Bearer ") ? header.slice(7) : "";
+      if (!idToken) {
     return res.status(400).json({ error: 'Missing token' });
   }
   try {
-    const userData = await verifyFirebaseToken(token);
+    const userData = await verifyFirebaseToken(idToken);
     res.json(userData);
   } catch (error) {
     res.status(401).json({ error: 'Invalid token' });

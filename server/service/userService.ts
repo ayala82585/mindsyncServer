@@ -35,23 +35,22 @@ const getUserProfile = async (uid: string) => {
 };
 
 // פונקציה לעדכון פרטי משתמש
-const updateUser = async (uid: string, userData: User) => {
-  try {
-    const user = await userDAL.updateUser(uid, userData);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    return user;
-  } catch (error) {
-    throw error;
-  }
-};
+// const updateUser = async (uid: string, userData: User) => {
+//   try {
+//     const user = await userDAL.updateUser(uid, userData);
+//     if (!user) {
+//       throw new Error('User not found');
+//     }
+//     return user;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 // הגדרת תפקיד למשתמש ועדכון ה-claims ב-Firebase
 async function setUserRole(targetUid: string, newRole: string) {
-  
   await admin.auth().setCustomUserClaims(targetUid, { role: newRole });
   await userDAL.updateUserRole(targetUid, newRole);
 }
 
-export { getUserProfile, updateUser, createOrUpdateUser, setUserRole };
+export { getUserProfile, createOrUpdateUser, setUserRole };
