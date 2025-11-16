@@ -1,50 +1,68 @@
-import { Request, Response } from "express";
-import * as ideaResponseDal from "../dal/IdeaResponseDal";
 import { IdeaResponse } from "../models/IdeaResponse";
-// הוספת תגובה לרעיון
-export const addResponse = async (req: Request, res: Response) => {
+import database from '../database';
+import { addResponseService, deleteResponseService, fetchResponsesForIdea, updateResponseService } from "../service/IdeaResponseService";
+
+const pool = database.getPool();
+
+export const addResponse = async (req: any, res: any) => {
   try {
-    const data: IdeaResponse = req.body;
-    const response = await ideaResponseDal.addResponse(data);
-    res.status(201).json(response);
-  } catch (err) {
-    console.error("Failed to add response:", err);
-    res.status(400).json({ error: err || "Error adding response" });
+    const { idea_id, user_id, emoji, text } = req.body;
+    if (!idea_id || !user_id || (!emoji && !text)) {
+      throw new Error("Missing required fields");
+    }
+    console.log({
+      idea_id, user_id, text
+    });
+    const result = await addResponseService(idea_id, user_id, emoji, text);
+    res.status(201).json(result);
+
+  } catch (error) {
+    console.error("Error in addResponse:", error);
+    throw error;
   }
 };
 
-export const updateResponse = async (req: Request, res: Response) => {
+export const updateResponse = async (req: any, res: any) => {
   try {
-    const id = Number(req.params.id);
+    const  id  = Number(req.params.id);
     const data = req.body;
-    const updated = await ideaResponseDal.updateResponse(id, data);
-    res.status(200).json(updated);
-  } catch (err) {
-    console.error("Failed to update response:", err);
-    res.status(400).json({ error: err || "Error updating response" });
+    if (!data.emoji && !data.text) {
+      throw new Error("At least one of 'emoji' or 'text' must be provided");
+    }
+    const result = await updateResponseService(id,data);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in updateResponse:", error);
+    throw error;
   }
 };
 
-// מחיקת תגובה לרעיון
-export const deleteResponse = async (req: Request, res: Response) => {
+export const deleteResponse = async (req: any, res: any) => {
   try {
     const id = Number(req.params.id);
-    await ideaResponseDal.deleteResponse(id);
+    await deleteResponseService(id);
     res.status(204).send();
-  } catch (err) {
-    console.error("Failed to delete response:", err);
-    res.status(400).json({ error: err || "Error deleting response" });
+  } catch (error) {
+    console.error("Error in deleteResponse:", error);
+    throw error;
   }
 };
 
-// קבלת כל התגובות לרעיון מסוים
-export const getResponsesByIdea = async (req: Request, res: Response) => {
+export const getResponsesByIdeaController = async (req: any, res: any) => {
   try {
-    const ideaId = Number(req.params.idea_id);
-    const responses = await ideaResponseDal.getResponsesByIdea(ideaId);
+    const ideaId = Number(req.params.id);
+    if (!Number.isInteger(ideaId)) {
+      return res.status(400).json({ error: "Invalid idea ID" });
+    }
+
+    const responses = await fetchResponsesForIdea(ideaId);
+    if (responses.length === 0) {
+      return res.status(404).json({ message: "No responses found for this idea" });
+    }
+
     res.status(200).json(responses);
   } catch (err) {
-    console.error("Failed to get responses:", err);
-    res.status(400).json({ error: err || "Error getting responses" });
+    console.error("Error fetching responses:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
-};
+}

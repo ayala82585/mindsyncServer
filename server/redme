@@ -1,0 +1,187 @@
+# 🧠 MindSync
+
+## README
+
+### 🇺🇸 English Version
+
+#### 1. Overview
+
+MindSync is a real-time collaborative brainstorming platform powered by AI. It enables teams to generate better ideas, faster, and in a more organized way.
+
+#### 2. Features
+
+* Create and join brainstorming sessions.
+* Real-time idea submission with emojis, tags, and links.
+* AI-powered idea clustering and summarization.
+* Voting and commenting system.
+* Session history with search and filters.
+
+#### 3. Tech Stack
+
+* **Frontend:** React
+* **Backend:** Node.js + Express
+* **Database:** PostgreSQL
+* **AI:** OpenAI API (ChatGPT/Embedding)
+
+#### 4. Project Structure
+
+```
+/client
+  /components
+  /pages
+  /services
+
+/server
+  /controllers
+  /routes
+  /models
+  /services
+
+/database
+/ai
+```
+
+#### 5. Setup Instructions
+
+##### Backend
+
+1. Install dependencies:
+
+```bash
+cd server
+npm install
+```
+
+2. Add a `.env` file with the following:
+
+```
+PORT=4000
+DATABASE_URL=...
+OPENAI_API_KEY=...
+```
+
+3. Run development server:
+
+```bash
+npm run dev
+```
+
+##### Frontend
+
+1. Install dependencies:
+
+```bash
+cd client
+npm install
+```
+
+2. Run client:
+
+```bash
+npm start
+```
+
+#### 6. API Documentation
+
+View full Swagger docs at: `https://localhost:4000/api-docs`
+
+#### 7. Security
+
+* HTTPS (via SSL certificates)
+* JWT Authentication with Firebase
+* Role-based permissions
+* Protection from SQL injection & XSS
+
+#### 8. AI Usage
+
+* Clustering
+* Summarization
+* Sentiment Analysis (optional)
+* Token usage tracked per session
+
+---
+
+### 🇮🇱 גרסה בעברית
+
+#### 1. סקירה כללית
+
+MindSync היא פלטפורמת סיעור מוחות שיתופי בזמן אמת, המשלבת בינה מלאכותית כדי לשפר את תהליך יצירת הרעיונות.
+
+#### 2. פיצ'רים מרכזיים
+
+* יצירת והצטרפות לסשנים.
+* הזנת רעיונות בזמן אמת עם אימוג'ים, תגיות וקישורים.
+* קיבוץ רעיונות אוטומטי עם AI.
+* הצבעות ותגובות.
+* היסטוריית סשנים עם חיפוש.
+
+#### 3. טכנולוגיות
+
+* **פרונט:** React
+* **בקאנד:** Node.js + Express
+* **מסד נתונים:** PostgreSQL
+* **בינה מלאכותית:** OpenAI API
+
+#### 4. מבנה התיקיות
+
+```
+/client
+/server
+/database
+/ai
+```
+
+#### 5. הוראות התקנה
+
+##### צד שרת
+
+1. התקנת חבילות:
+
+```bash
+cd server
+npm install
+```
+
+2. קובץ `.env`:
+
+```
+PORT=4000
+DATABASE_URL=...
+OPENAI_API_KEY=...
+```
+
+3. הרצת שרת:
+
+```bash
+npm run dev
+```
+
+##### צד לקוח
+
+```bash
+cd client
+npm install
+npm start
+```
+
+#### 6. תיעוד API
+
+ניתן לגשת לסווגר בכתובת: `https://localhost:4000/api-docs`
+
+#### 7. אבטחה
+
+* HTTPS עם תעודת SSL
+* אימות עם Firebase JWT
+* הרשאות לפי תפקיד
+* הגנה מ-SQL Injection ו-XSS
+
+#### 8. שימוש בבינה מלאכותית
+
+* קיבוץ רעיונות
+* סיכום
+* ניתוח רגשות (אופציונלי)
+* שמירת כמות טוקנים לצורך גבייה
+
+---
+
+אם יש צורך, ניתן להוסיף קובץ `CONTRIBUTING.md` למפתחים חדשים שיצטרפו בהמשך.

@@ -1,11 +1,13 @@
 import { Router } from "express";
-import * as controller from "../controllers/IdeaResponseController";
 import { requireFirebaseAuth } from "../middleware/auth";
 import { verifyUserInDb } from "../middleware/verifyUserInDb";
+import { addResponse, deleteResponse, getResponsesByIdeaController, updateResponse } from "../controllers/IdeaResponseController";
 
-const router = Router();
-router.use(requireFirebaseAuth,verifyUserInDb);
-router.post("/create", controller.addResponse);
-router.put("/update/{id}", controller.updateResponse);
-router.delete("/:id", controller.deleteResponse); router.get("/by-idea/:ideaId", controller.getResponsesByIdea);
-export default router;
+export const ideaResponsesRouter = Router();
+
+ideaResponsesRouter.use(requireFirebaseAuth, verifyUserInDb);
+ideaResponsesRouter.post("/create", addResponse);
+ideaResponsesRouter.put("/update/:id", updateResponse);
+ideaResponsesRouter.delete("/delete/:id", deleteResponse);
+ideaResponsesRouter.get("/by-idea/:id", getResponsesByIdeaController);
+export default ideaResponsesRouter;
