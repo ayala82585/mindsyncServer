@@ -117,5 +117,6 @@ RETURNING *`;
       console.error("🔴 שגיאה בהפחתת קרדיטים:", error);
       throw error;
     };
-  }}
+  }
+}
 export default UserDAL;

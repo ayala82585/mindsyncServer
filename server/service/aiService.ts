@@ -10,8 +10,8 @@ interface AIRequestParams {
 }
 
 const userdal = new userDAL();
-//
-export const handleAIRequest = async ({ userId, sessionOwnerId, mode ,session_id}: AIRequestParams) => {
+
+export const handleAIRequest = async ({ userId, sessionOwnerId, mode, session_id }: AIRequestParams) => {
 
     if (userId !== sessionOwnerId) {
         throw new Error("רק מנהל הסשן יכול לבצע קריאה ל-AI");
@@ -39,7 +39,8 @@ export const handleAIRequest = async ({ userId, sessionOwnerId, mode ,session_id
         sessionId: session_id, // או אולי sessionId אמיתי אם קיים
         modelUsed: model,
         mode,
-        tokensUsed: 1, // 🟡 כאן שימי את מספר הטוקנים האמיתי מהמודל
+        tokensUsed: 1, // :large_yellow_circle: כאן שימי את מספר הטוקנים האמיתי מהמודל
     });
+
     return { modelUsed: model };
 };

@@ -10,12 +10,18 @@ import { verifyUserInDb } from './middleware/verifyUserInDb';
 import aiRoutes from "./routes/aiRoutes";
 import { swaggerSpec } from "./swagger";
 import swaggerUi from "swagger-ui-express";
-import http from 'http';
+import https from 'https';
+import fs from 'fs';
 import { Server as SocketIOServer } from 'socket.io';
+import IdeaResponseRoutes from './routes/IdeaResponseRoutes';
 
-const app = express();  
+const app = express();
 const admin = require('firebase-admin');
-const server = http.createServer(app);
+const httpsOptions = {
+  key: fs.readFileSync('./ssl/server.key'),
+  cert: fs.readFileSync('./ssl/server.cert')
+};
+const server = https.createServer(httpsOptions, app);
 const io = new SocketIOServer(server, {
   cors: { origin: 'http://localhost:3000' } // התאימי את ה-origin לפי הצורך
 });
@@ -31,6 +37,7 @@ app.use('/ideas', ideasRouter);
 app.use('/sessions', sessionsRouter);
 app.use('/ideas', ideasRouter);
 app.use("/ai", aiRoutes);
+app.use("/ideaResponse", IdeaResponseRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/protected-data', requireFirebaseAuth, (req: Request, res: Response) => {
   if (!req.user) {

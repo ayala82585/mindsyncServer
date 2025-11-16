@@ -5,20 +5,19 @@ import { User } from '../models/User';
 const userDAL = new UserDal();
 
 // פונקציה ליצירה או עדכון משתמש מבוסס Firebase                                 
-async function createOrUpdateUser(uid: string, email: string, full_name: string): Promise<User | null> {
+async function createOrUpdateUser(uid: string, email: string, full_name: string, photo_url?: string, phone?: string): Promise<User | null> {
      const userData: User = {
        uid,
        email,
        full_name,
-       photo_url: 'ברירת מחדל',
+       photo_url: photo_url ? photo_url : "ברירת מחדל",
        created_at: new Date(),
        updated_at: new Date(),
        aisessioncredits: 10,
-       aimode: 'free'
+       aimode: 'free',
+       phone: phone ? phone : ''
      };
-
         return await userDAL.upsertUserFromFirebase(uid, userData);
-
 }
 
 //  לקבלת פרופיל משתמש לפי UID

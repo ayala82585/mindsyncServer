@@ -38,7 +38,6 @@ function fromBase64Url(base64url: string): Buffer {
   let base64 = base64url
     .replace(/-/g, '+')
     .replace(/_/g, '/');
-
   // הוספת padding בחזרה אם חסר
   while (base64.length % 4 !== 0) {
     base64 += '=';

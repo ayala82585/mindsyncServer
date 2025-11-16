@@ -1,7 +1,10 @@
-import { insertIdea, isParticipant, getIdeasFromSession, updateIdeaReaction } from '../dal/ideaDal';
+import { deleteResponse } from '../controllers/IdeaResponseController';
+import { insertIdea, isParticipant, getIdeasFromSession, updateIdea, deleteIdea, getIdeasBySessionDAL } from '../dal/ideaDal';
+import database from '../database';
 import { ideas } from '../models/Idea';
+const pool = database.getPool();
 
-// יצירת רעיון חדש
+
 async function createIdeaService(params: { sessionId: number; authorId: string; text: string; }): Promise<ideas> {
 
   const { sessionId, authorId, text } = params;
@@ -21,16 +24,55 @@ async function fetchSessionIdeas(sessionId: number, since?: string) {
   return await getIdeasFromSession(sessionId, since);
 }
 
-// הוספת תגובה לרעיון (כגון לייק, אהבתי, וכו')
-async function incrementReaction(ideaId: number, reaction: string) {
+export const updateIdeaService = async (id: number, uid: string, data: Partial<ideas>) => {
 
-  const allowed = ["likes", "dislikes", "laughs", "sad", "angry"];
+  const ideaResult = await pool.query(
+    `SELECT * FROM ideas WHERE id = $1`,
+    [id]
+  );
+  if (ideaResult.rows.length === 0) {
+    throw new Error("Idea not found");
+  }
+  const idea = ideaResult.rows[0];
+  console.log(idea.session_id);
 
-  if (!allowed.includes(reaction)) {
-    throw new Error("Invalid reaction type");
+  // שלב 2: בדיקת קיום הסשן של הרעיון
+  const sessionResult = await pool.query(
+    `SELECT * FROM sessions WHERE id = $1`,
+    [data.sessionId]
+  );
+console.log(data);
+
+  if (sessionResult.rows.length === 0) {
+    throw new Error("Session not found");
+  }
+  if(idea.session_id !== data.sessionId){
+    throw new Error("Cannot change sessionId of the idea");
+  }
+  if (idea.author_id !== uid) {
+    throw new Error("You are not allowed to update this idea");
   }
 
-  return await updateIdeaReaction(ideaId, reaction);
-}
+  return updateIdea(id, data);
+};
 
-export { createIdeaService, fetchSessionIdeas, incrementReaction };
+export const deleteIdeaService = async (id: number, uid: string) => {
+  const ideaResult = await pool.query(
+    `SELECT * FROM ideas WHERE id = $1`,
+    [id]
+  );
+  if (ideaResult.rowCount === 0) {
+    throw new Error("Idea not found");
+  }
+  if (ideaResult.rows[0].author_id !== uid) {
+    throw new Error("You are not allowed to delete this idea");
+  }
+console.log(ideaResult.rows[0].author_id);
+
+  return deleteIdea(id);
+};
+
+export async function getIdeasBySessionService(sessionId: number) {
+  return await getIdeasBySessionDAL(sessionId);
+}
+export { createIdeaService, fetchSessionIdeas };

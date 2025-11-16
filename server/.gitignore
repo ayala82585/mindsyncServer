@@ -2,15 +2,10 @@
 package-lock.json
 tsconfig.json
 .env
-mindsync-3fb4f-firebase-adminsdk-fbsvc-6a8eb9b421.json
-mindsync-b978b-firebase-adminsdk-fbsvc-f0703ab54f.json
-mindsync-3fb4f-c1d1826e0375.json
-mindsync-3fb4f-firebase-adminsdk-fbsvc-24a8955ed9.json
-
-mindsync-3fb4f-firebase-adminsdk-fbsvc-a87cb64261.json
-
+not good.json
+not good(2).json
+not good(3).json
 getToken.ts
 /fireToken/node_modules
 enable-totp.js
-mindsync-b978b-firebase-adminsdk-fbsvc-1951ea9b09.json
-mindsync-b978b-firebase-adminsdk-fbsvc-031f8c44f0.json
+mindsync-b978b-firebase-adminsdk-fbsvc-b0fede49fe.json
