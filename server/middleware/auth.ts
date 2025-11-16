@@ -13,6 +13,7 @@ export async function requireFirebaseAuth(req: Request, res: Response, next: Nex
     const decoded = await verifyFirebaseToken(idToken);
     req.uid = decoded.uid;
     req.firebaseDecoded = decoded;
+    
     next();
   }
   catch (error: any) {

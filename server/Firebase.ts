@@ -31,6 +31,6 @@ export async function verifyFirebaseToken(token: string): Promise<{ uid: string,
   }
 }
 
-export const verifyIdToken = (idToken: string) => admin.auth().verifyIdToken(idToken);
+// export const verifyIdToken = (idToken: string) => admin.auth().verifyIdToken(idToken);
 
 export default admin;
