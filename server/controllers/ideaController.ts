@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createIdeaService, fetchSessionIdeas, incrementReaction } from '../service/ideaService';
+import { createIdeaService, deleteIdeaService, fetchSessionIdeas, getIdeasBySessionService, updateIdeaService } from '../service/ideaService';
 import { io } from '../index'; // או מהנתיב הרלוונטי
 
 // יצירת רעיון חדש
@@ -52,24 +52,47 @@ async function createIdeaCtrl(req: Request, res: Response, next: NextFunction) {
 //   }
 // };
 
-// הוספת תגובה לרעיון (כגון לייק, אהבתי, וכו')
-const reactToIdea = async (req: Request, res: Response) => {
-
+export const updateIdeaCtrl = async (req: any, res: any) => {
   try {
-    const { ideaId } = req.params;
-    const { reaction } = req.body;
-
-    if (!reaction)
-      return res.status(400).json({ error: "Missing reaction" });
-
-    const updated = await incrementReaction(Number(ideaId), reaction);
-    res.json(updated);
-  }
-  catch (err) {
-    console.error("Error reacting to idea:", err);
-    res.status(500).json({ error: "Internal server error" });
+    const  id  = Number(req.params.id);
+    const data = req.body;
+    const uid = req.user?.uid;
+    if ( !data.text) {
+      throw new Error("Text must be provided");
+    }
+    const result = await updateIdeaService(id, uid, data);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error in updateIdea:", error);
+    throw error;
   }
 };
 
-export { createIdeaCtrl, reactToIdea };
+export const deleteIdeaCtrl = async (req: any, res: any) => {
+  try {
+    const id = Number(req.params.id);
+    const uid = req.user?.uid;
+    await deleteIdeaService(id, uid);
+    res.status(204).send();
+  } catch (error) {
+    console.error("Error in deleteIdea:", error);
+    throw error;
+  }
+};
+
+export async function getIdeasBySessionCtrl(req: Request, res: Response, next: NextFunction) {
+  try {
+    const sessionId = Number(req.params.sessionId);
+
+    if (!Number.isInteger(sessionId)) {
+      return res.status(400).json({ error: "Invalid session ID" });
+    }
+
+    const ideas = await getIdeasBySessionService(sessionId);
+    res.status(200).json(ideas);
+  } catch (error) {
+    next(error);
+  }
+}
+export { createIdeaCtrl };
 //, getIdeasBySession

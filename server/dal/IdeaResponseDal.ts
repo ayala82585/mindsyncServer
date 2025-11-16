@@ -4,19 +4,21 @@ import database from '../database';
 const pool = database.getPool();
 
 // פונקציה להוספה, עדכון ומחיקת תגובות לרעיונות
-export const addResponse = async (response: IdeaResponse) => {
+
+export const addResponse = async (idea_id: number, user_id: string, emoji?: string,
+  text?: string
+) => {
   try {
-    const { idea_id, user_id, emoji, text } = response;
-    if (!idea_id || !user_id || (!emoji && !text)) {
-      throw new Error("Missing required fields");
-    }
-    const result = await pool.query(
-      `INSERT INTO idea_responses (idea_id, user_id, emoji, text)
-       VALUES ($1, $2, $3, $4)
-       RETURNING *`,
-      [idea_id, user_id, emoji || null, text || null]
-    );
-    return result.rows[0];
+  console.log({ idea_id, user_id, emoji, text });
+
+  const result = await pool.query(
+    `INSERT INTO idea_responses (idea_id, user_id, emoji, text)
+     VALUES ($1, $2, $3, $4)
+     RETURNING *`,
+    [idea_id, user_id, emoji || null, text || null]
+  );
+
+  return result.rows[0];
   } catch (error) {
     console.error("Error in addResponse:", error);
     throw error;
@@ -37,6 +39,7 @@ export const updateResponse = async (id: number, response: Partial<IdeaResponse>
        RETURNING *`,
       [emoji || null, text || null, id]
     );
+
     return result.rows[0];
   } catch (error) {
     console.error("Error in updateResponse:", error);
@@ -53,15 +56,16 @@ export const deleteResponse = async (id: number) => {
     throw error;
   }
 };
-// export const getResponsesByIdea = async (idea_id: number) => {
-//   try {
-//     const result = await pool.query(
-//       `SELECT * FROM idea_responses WHERE idea_id = $1 ORDER BY created_at ASC`,
-//       [idea_id]
-//     );
-//     return result.rows;
-//   } catch (error) {
-//     console.error("Error in getResponsesByIdea:", error);
-//     throw error;
-//   }
-// };
+
+export const getResponsesByIdeaId = async (idea_id: number) => {
+  try {
+    const result = await pool.query(
+      `SELECT * FROM idea_responses WHERE idea_id = $1 ORDER BY created_at ASC`,
+      [idea_id]
+    );
+    return result.rows;
+  } catch (error) {
+    console.error("Error in getResponsesByIdea:", error);
+    throw error;
+  }
+};

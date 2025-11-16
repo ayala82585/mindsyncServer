@@ -45,17 +45,37 @@ export async function getIdeasFromSession(sessionId: number, since?: string) {
   return result.rows;
 }
 
-// הוספת תגובה לרעיון (כגון לייק, אהבתי, וכו')
-export async function updateIdeaReaction(ideaId: number, reaction: string) {
+export const updateIdea = async (id: number, response: Partial<ideas>) => {
+  try {
+    const { text } = response;
+    if ( !text) {
+      throw new Error("Text must be provided");
+    }
+    const result = await pool.query(
+      `UPDATE ideas
+       SET text = $1
+       WHERE id = $2
+       RETURNING *`,
+      [text || null, id]
+    );
 
-  const query = `
-    UPDATE ideas
-    SET ${reaction} = ${reaction} + 1,
-        updated_at = NOW()
-    WHERE id = $1
-    RETURNING *;
-  `;
-  
-  const result = await pool.query(query, [ideaId]);
-  return result.rows[0];
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in updateIdea:", error);
+    throw error;
+  }
+};
+
+export const deleteIdea = async (id: number) => {
+  try {
+    await pool.query(`DELETE FROM ideas WHERE id = $1`, [id]);
+  } catch (error) {
+    console.error("Error in deleteIdea:", error);
+    throw error;
+  }
+};
+
+export async function getIdeasBySessionDAL(sessionId: number) {
+  const result = await pool.query("SELECT * FROM ideas WHERE session_id = $1 ORDER BY created_at ASC", [sessionId]);
+  return result.rows;
 }
