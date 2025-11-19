@@ -3,7 +3,6 @@ import { sessions } from '../models/Session';
 import { encrypt } from '../utils/crypto';
 import { hashPassword, verifyPassword } from '../utils/hash';
 
-
 // יצירת סשן חדש
 async function createSessionService(params: { title: string; description: string; password: string; ownerUid: string; }): Promise<sessions> {
 
@@ -37,8 +36,9 @@ async function joinSessionService(sessionId: number, password: string, userId: s
 
 // יצירת קישור הצטרxxx לסשן עם הצפנה
 export function generateSessionJoinLink(sessionId: number, password: string): string {
-  const SALT = process.env.SESSION_TOKEN_SUFFIX!;
-  const payload = `${sessionId}|${SALT}|${password}`;
+  const SALT = process.env.ID_SALT;
+  console.log(SALT);
+  const payload = `?sessionId=${sessionId}|${SALT}|&password=${password}`;
   const token = encrypt(payload);
   return `${encodeURIComponent(token)}`;
 }
@@ -69,4 +69,25 @@ export async function getAllSessionsService() {
 export async function getSessionsByUserIdService(userId: string) {
   return await getSessionsByUserIdDAL(userId);
 }
+
+import { deleteSessionDAL } from '../dal/sessionDal';
+// מחיקת session
+export async function deleteSessionService(sessionId: number, userId: string): Promise<void> {
+  try {
+    const deleted = await deleteSessionDAL(sessionId, userId);
+    if (!deleted) {
+      const error: any = new Error('Failed to delete session');
+      error.status = 500;
+      throw error;
+    }
+  } catch (error: any) {
+    if (error.message === 'Session not found') {
+      error.status = 404;
+    } else if (error.message === 'Unauthorized: Only session owner can delete') {
+      error.status = 403;
+    }
+    throw error;
+  }
+}
+
 export { createSessionService, joinSessionService };

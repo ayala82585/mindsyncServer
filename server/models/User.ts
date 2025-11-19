@@ -8,7 +8,7 @@ export interface User {
   updated_at: Date;
   is_verified?: boolean;
   aisessioncredits: number;
-  aimode: "free" | "paid";
+  aimode: "free" | "Pro" | "Business" | "Enterprise";
   phone: string;
 }
 

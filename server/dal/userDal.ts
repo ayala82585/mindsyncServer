@@ -16,7 +16,7 @@ class UserDAL {
       if (updated)
         return updated;
 
-      const result = await database.getPool().query('INSERT INTO users (uid, email, full_name, photo_url, role, aisessioncredits, aimode) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7) RETURNING *', [uid, userData.email, userData.full_name, userData.photo_url, "user", userData.aisessioncredits, userData.aimode]);
+      const result = await database.getPool().query('INSERT INTO users (uid, email, full_name, photo_url, role, aisessioncredits, aimode, phone) VALUES (\$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8) RETURNING *', [uid, userData.email, userData.full_name, userData.photo_url, "user", userData.aisessioncredits, userData.aimode, userData.phone]);
 
       if (!result.rows || result.rows.length === 0) {
         throw new Error('User insertion failed');
@@ -62,7 +62,7 @@ class UserDAL {
       throw new Error('Invalid UID');
     }
     try {
-      const result = await this.pool.query('UPDATE users SET email = $1, full_name = $2, photo_url = $3, role = $4 WHERE uid = $5 RETURNING *', [userData.email, userData.full_name, userData.photo_url, "user", uid]);
+      const result = await this.pool.query('UPDATE users SET email = $1, full_name = $2, photo_url = $3, role = $4, phone = $5 WHERE uid = $6 RETURNING *', [userData.email, userData.full_name, userData.photo_url, "user", userData.phone, uid]);
       if (!result.rows || result.rows.length === 0) {
         return null; // משתמש לא נמצא לעדכון
       }
@@ -117,6 +117,19 @@ RETURNING *`;
       console.error("🔴 שגיאה בהפחתת קרדיטים:", error);
       throw error;
     };
+  }
+
+  // מחיקת משתמש מהמערכת
+  public deleteUserFromDB = async (userId: string) => {
+    // מחיקת התלויות קודם לפי סדר נכון
+    await this.pool.query(`DELETE FROM session_participants WHERE user_id = $1`, [userId]);
+    await this.pool.query(`DELETE FROM responses WHERE user_id = $1`, [userId]);
+    await this.pool.query(`DELETE FROM ideas WHERE user_id = $1`, [userId]);
+    // await this.pool.query('DELETE FROM ideas WHERE participant_id = $1', [participantId]);
+    // await this.pool.query('DELETE FROM session_participants WHERE id = $1', [participantId]);
+    // מחיקת המשתמש עצמו
+    const result = await this.pool.query(`DELETE FROM users WHERE id = $1`, [userId]);
+    return (result.rowCount ?? 0) > 0;
   }
 }
 export default UserDAL;

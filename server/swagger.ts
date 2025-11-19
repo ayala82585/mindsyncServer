@@ -55,7 +55,7 @@ const options: swaggerJSDoc.Options = {
         }
       },
 
-      "/user/getMe/{uid}": {
+      "/user/getUser/{uid}": {
         "get": {
           "summary": "get user profile by uid",
           "tags": ["Users"],
@@ -319,7 +319,6 @@ const options: swaggerJSDoc.Options = {
                   "type": "object",
                   "properties": {
                     "idea_id": { "type": "integer" },
-                    "user_id": { "type": "string", "format": "uuid" },
                     "emoji": { "type": "string" },
                     "text": { "type": "string" }
                   },
@@ -571,44 +570,89 @@ const options: swaggerJSDoc.Options = {
         }
       },
       "/ideaResponse/by-idea/{id}": {
-  "get": {
-    "summary": "Get all responses for a specific idea",
-    "tags": ["Responses"],
-    "security": [{ "bearerAuth": [] }],
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": { "type": "number" }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "List of responses for the idea",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "number" },
-                  "idea_id": { "type": "number" },
-                  "user_id": { "type": "string" },
-                  "text": { "type": "string" },
-                  "emoji": { "type": "string" },
-                  "created_at": { "type": "string", "format": "date-time" }
+        "get": {
+          "summary": "Get all responses for a specific idea",
+          "tags": ["Responses"],
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "number" }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "List of responses for the idea",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "number" },
+                        "idea_id": { "type": "number" },
+                        "user_id": { "type": "string" },
+                        "text": { "type": "string" },
+                        "emoji": { "type": "string" },
+                        "created_at": { "type": "string", "format": "date-time" }
+                      }
+                    }
+                  }
                 }
               }
+            },
+            "404": { "description": "No responses found" }
+          }
+        }
+      }
+      , "/sessions/delete/{id}": {
+        "delete": {
+          "summary": "Delete session (owner only)",
+          "tags": ["sessions"],
+          "security": [
+            { "bearerAuth": [] }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "integer" },
+              "description": "Session ID to delete"
             }
+          ],
+          "responses": {
+            "204": { "description": "Session deleted successfully" },
+            "400": { "description": "Invalid session ID" },
+            "401": { "description": "Unauthorized" },
+            "403": { "description": "Forbidden - Only session owner can delete" },
+            "404": { "description": "Session not found" }
           }
         }
       },
-      "404": { "description": "No responses found" }
-    }
-  }
-}
+      "/user/delete/{id}": {
+        "delete": {
+          "summary": "Delete user by ID",
+          "tags": ["Users"],
+          "security": [{ "bearerAuth": [] }],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": { "type": "string" }
+            }
+          ],
+          "responses": {
+            "200": { "description": "User deleted successfully" },
+            "400": { "description": "Missing user ID" },
+            "404": { "description": "User not found" }
+          }
+        }
+      }
     }
   },
   apis: ["src/**/*.ts"] // הנתיבים שבהם הקבצים שלך

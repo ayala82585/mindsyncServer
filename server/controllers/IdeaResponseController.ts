@@ -6,14 +6,15 @@ const pool = database.getPool();
 
 export const addResponse = async (req: any, res: any) => {
   try {
-    const { idea_id, user_id, emoji, text } = req.body;
-    if (!idea_id || !user_id || (!emoji && !text)) {
+        const userId = req.user?.uid;
+    const { idea_id,  emoji, text } = req.body;
+    if (!idea_id || !userId || (!emoji && !text)) {
       throw new Error("Missing required fields");
     }
     console.log({
-      idea_id, user_id, text
+      idea_id, userId, text
     });
-    const result = await addResponseService(idea_id, user_id, emoji, text);
+    const result = await addResponseService(idea_id, userId, emoji, text);
     res.status(201).json(result);
 
   } catch (error) {

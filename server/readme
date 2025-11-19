@@ -1,0 +1,105 @@
+# 🧠 MindSync
+
+## README
+
+### 🇺🇸 English Version
+
+#### 1. Overview
+
+MindSync is a real-time collaborative brainstorming platform powered by AI. It enables teams to generate better ideas, faster, and in a more organized way.
+
+#### 2. Features
+
+* Create and join brainstorming sessions.
+* Real-time idea submission with emojis, tags, and links.
+* AI-powered idea clustering and summarization.
+* Voting and commenting system.
+* Session history with search and filters.
+
+#### 3. Tech Stack
+
+* **Frontend:** React
+* **Backend:** Node.js + Express
+* **Database:** PostgreSQL
+* **AI:** OpenAI API (ChatGPT/Embedding)
+
+#### 4. Project Structure
+
+/controllers         # Handles incoming HTTP requests (e.g. users, sessions)
+/routes              # Route definitions and endpoints
+/models              # Data models and schema representations
+/service             # Core business logic
+/dal                 # Database access logic
+/firebaseToken       # Firebase token handling and auth helpers
+/middleware          # Middleware (authentication, validation, etc.)
+/types               # TypeScript custom types and interfaces
+/utils               # Utility functions (common helpers)
+/ssl                 # SSL certificate files for HTTPS
+/vendor              # Third-party or generated code
+/node_modules        # Installed dependencies (auto-generated)
+/.env                # Environment configuration file
+/index.ts            # Main server entry point
+/Firebase.ts         # Firebase initialization and setup
+/database.ts         # Database connection setup
+/swagger.ts          # Swagger/OpenAPI documentation configuration
+/package.json        # Project metadata and dependency definitions
+/tsconfig.json       # TypeScript compiler configuration
+
+#### 5. Setup Instructions
+
+##### Backend
+
+1. Install dependencies:
+
+```bash
+cd server
+npm install
+```
+
+2. Add a `.env` file with the following:
+
+```
+PORT=4000
+DATABASE_URL=...
+OPENAI_API_KEY=...
+```
+
+3. Run development server:
+
+```bash
+npm run dev
+```
+
+##### Frontend
+
+1. Install dependencies:
+
+```bash
+cd client
+npm install
+```
+
+2. Run client:
+
+```bash
+npm start
+```
+
+#### 6. API Documentation
+
+View full Swagger docs at: `https://localhost:4000/api-docs`
+
+#### 7. Security
+
+* HTTPS (via SSL certificates)
+* JWT Authentication with Firebase
+* Role-based permissions
+* Protection from SQL injection & XSS
+
+#### 8. AI Usage
+
+* Clustering
+* Summarization
+* Sentiment Analysis (optional)
+* Token usage tracked per session
+

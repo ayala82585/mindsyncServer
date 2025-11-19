@@ -48,8 +48,18 @@ const getUserProfile = async (uid: string) => {
 
 // הגדרת תפקיד למשתמש ועדכון ה-claims ב-Firebase
 async function setUserRole(targetUid: string, newRole: string) {
+
   await admin.auth().setCustomUserClaims(targetUid, { role: newRole });
+  
   await userDAL.updateUserRole(targetUid, newRole);
+}
+
+export async function deleteUserService(userId: string) {
+  if (!userId) {
+    throw new Error("User ID is required");
+  }
+
+  return await userDAL.deleteUserFromDB(userId);
 }
 
 export { getUserProfile, createOrUpdateUser, setUserRole };

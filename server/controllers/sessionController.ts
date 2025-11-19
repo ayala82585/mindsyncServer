@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createSessionService, joinSessionService, generateSessionJoinLink, findSession, getAllSessionsService, getSessionsByUserIdService } from '../service/sessionService';
+import { createSessionService, joinSessionService, generateSessionJoinLink, findSession, getAllSessionsService, getSessionsByUserIdService, deleteSessionService } from '../service/sessionService';
 import { setUserRole } from '../service/userService';
 
 // יצירת סשן חדש
@@ -100,4 +100,23 @@ export async function getSessionsByUserCtrl(req: Request, res: Response, next: N
     next(error);
   }
 }
+
+export async function deleteSessionCtrl(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = req.user?.uid;
+    const sessionId = Number(req.params.id);
+    if (!userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    if (!Number.isInteger(sessionId) || sessionId <= 0) {
+      return res.status(400).json({ error: 'Invalid session ID' });
+    }
+    await deleteSessionService(sessionId, userId);
+    res.status(204).send(); // No Content - מחיקה הצליחה
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 export { createSessionCtrl, joinSessionCtrl };

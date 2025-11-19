@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createSessionCtrl, getAllSessionsCtrl, getSessionHandler, getSessionsByUserCtrl, joinSessionCtrl } from '../controllers/sessionController';
+import { createSessionCtrl, deleteSessionCtrl, getAllSessionsCtrl, getSessionHandler, getSessionsByUserCtrl, joinSessionCtrl } from '../controllers/sessionController';
 import { requireFirebaseAuth } from '../middleware/auth';
 import { verifyUserInDb } from '../middleware/verifyUserInDb';
 
@@ -11,3 +11,4 @@ sessionsRouter.post('/:id/join', joinSessionCtrl);
 sessionsRouter.post("/get/:identifier", getSessionHandler);
 sessionsRouter.get("/getAllSessions", getAllSessionsCtrl);
 sessionsRouter.get("/user", getSessionsByUserCtrl);
+sessionsRouter.delete('/delete/:id', deleteSessionCtrl);

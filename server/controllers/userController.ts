@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { getUserProfile ,setUserRole ,createOrUpdateUser} from '../service/userService';
+import { NextFunction, Request, Response } from 'express';
+import { getUserProfile ,setUserRole ,createOrUpdateUser, deleteUserService} from '../service/userService';
 
 
 // טיפול בבקשה ליצירה או עדכון משתמש
@@ -65,6 +65,25 @@ async function setRoleAndClaimsController(req: Request, res: Response) {
   } catch (error: any) {
     console.error('Error in changeUserRoleController:', error);
     res.status(error.status || 500).json({ error: error.message || 'Internal Server Error' });
+  }
+}
+
+export async function deleteUserController(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = req.params.id;
+
+    if (!userId) {
+      return res.status(400).json({ error: "Missing user ID" });
+    }
+
+    const deleted = await deleteUserService(userId);
+    if (!deleted) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    next(err);
   }
 }
 
